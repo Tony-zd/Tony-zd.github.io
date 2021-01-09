@@ -20,19 +20,22 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+  <meta name="description" content="一、hash和hashcode1、百度百科对于hash的解释 2、hashcode123（1）hash函数计算得出hash值，hash值维护在一张hash表中，整张hash是由hash值组成的；（2）hashcode就是通过hash函数算出的一种hash值，每个对象都有hashcode，将对象的物理地址通过hash函数计算就得到了hashcode；（3）对象的hashcode有可能相等，所以has">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2020/02/23/hello-world/index.html">
+<meta property="og:title" content="hashcode原理">
+<meta property="og:url" content="http://yoursite.com/2021/01/09/hashcode%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Welcome">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="一、hash和hashcode1、百度百科对于hash的解释 2、hashcode123（1）hash函数计算得出hash值，hash值维护在一张hash表中，整张hash是由hash值组成的；（2）hashcode就是通过hash函数算出的一种hash值，每个对象都有hashcode，将对象的物理地址通过hash函数计算就得到了hashcode；（3）对象的hashcode有可能相等，所以has">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-23T05:09:34.796Z">
-<meta property="article:modified_time" content="2020-02-23T07:46:21.357Z">
+<meta property="og:image" content="http://yoursite.com/.com//D:%5CGitLocalLibrary%5Chexo%5Csource_posts%5Chashcode%E5%8E%9F%E7%90%86%5C874710-20161116202528013-1417169655.png">
+<meta property="article:published_time" content="2021-01-09T06:07:32.000Z">
+<meta property="article:modified_time" content="2021-01-09T07:49:16.252Z">
 <meta property="article:author" content="Tony-zd">
+<meta property="article:tag" content="集合">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/.com//D:%5CGitLocalLibrary%5Chexo%5Csource_posts%5Chashcode%E5%8E%9F%E7%90%86%5C874710-20161116202528013-1417169655.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/02/23/hello-world/">
+<link rel="canonical" href="http://yoursite.com/2021/01/09/hashcode%E5%8E%9F%E7%90%86/">
 
 
 <script id="page-configurations">
@@ -44,7 +47,7 @@
   };
 </script>
 
-  <title>Hello World | Welcome</title>
+  <title>hashcode原理 | Welcome</title>
   
 
 
@@ -155,7 +158,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/23/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/09/hashcode%E5%8E%9F%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/timg.jfif">
@@ -168,7 +171,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          hashcode原理
         </h1>
 
         <div class="post-meta">
@@ -179,7 +182,18 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-23 13:09:34 / 修改时间：15:46:21" itemprop="dateCreated datePublished" datetime="2020-02-23T13:09:34+08:00">2020-02-23</time>
+              <time title="创建时间：2021-01-09 14:07:32 / 修改时间：15:49:16" itemprop="dateCreated datePublished" datetime="2021-01-09T14:07:32+08:00">2021-01-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -193,22 +207,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
+        <h3 id="一、hash和hashcode"><a href="#一、hash和hashcode" class="headerlink" title="一、hash和hashcode"></a>一、hash和hashcode</h3><h4 id="1、百度百科对于hash的解释"><a href="#1、百度百科对于hash的解释" class="headerlink" title="1、百度百科对于hash的解释"></a>1、百度百科对于hash的解释</h4><p><img src="/.com//D:%5CGitLocalLibrary%5Chexo%5Csource_posts%5Chashcode%E5%8E%9F%E7%90%86%5C874710-20161116202528013-1417169655.png" alt></p>
+<h4 id="2、hashcode"><a href="#2、hashcode" class="headerlink" title="2、hashcode"></a>2、hashcode</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">（1）hash函数计算得出hash值，hash值维护在一张hash表中，整张hash是由hash值组成的；</span><br><span class="line">（2）hashcode就是通过hash函数算出的一种hash值，每个对象都有hashcode，将对象的物理地址通过hash函数计算就得到了hashcode；</span><br><span class="line">（3）对象的hashcode有可能相等，所以hashcode相同，对象不一定相等；对象相等，hashcode一定相同</span><br></pre></td></tr></table></figure>
 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="二、hashcode的应用"><a href="#二、hashcode的应用" class="headerlink" title="二、hashcode的应用"></a>二、hashcode的应用</h3><h4 id="1、对象的hashcode和equals方法"><a href="#1、对象的hashcode和equals方法" class="headerlink" title="1、对象的hashcode和equals方法"></a>1、对象的hashcode和equals方法</h4><p>​        Object类有两个方法：hashcode和equals方法，对于object对象，equals对象是直接比较对象的地址，这个时候和“==”的作用就是一样的，但是像String中，重写了hashcode和equals方法，String的equals方法比较的是对象的值是否相等。</p>
+<p>​        有这样两条规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1、如果两个对象equals相等，那么这两个对象的HashCode一定也相同</span><br><span class="line">2、如果两个对象的HashCode相同，不代表两个对象就相同，只能说明这两个对象在散列存储结构中，存放于同一个位置</span><br><span class="line">3、如果重写了equals方法，最好也重写hashcode方法</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
+<h4 id="2、HashMap"><a href="#2、HashMap" class="headerlink" title="2、HashMap"></a>2、HashMap</h4><p>（1）存储结构：数组+链表，当链表长度超过8时，将链表转成红黑树</p>
+<h4 id="3、ConcurrentHashMap"><a href="#3、ConcurrentHashMap" class="headerlink" title="3、ConcurrentHashMap"></a>3、ConcurrentHashMap</h4><h4 id="4、hash冲突"><a href="#4、hash冲突" class="headerlink" title="4、hash冲突"></a>4、hash冲突</h4><h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3>
     </div>
 
     
@@ -216,17 +227,20 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9B%86%E5%90%88/" rel="tag"># 集合</a>
+          </div>
 
         
 
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2021/01/06/hexo%E5%8F%91%E5%B8%83%E5%8D%9A%E5%AE%A2%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="hexo发布博客常用命令">
-      hexo发布博客常用命令 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/01/06/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95/" rel="prev" title="for循环常见用法">
+      <i class="fa fa-chevron-left"></i> for循环常见用法
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -286,7 +300,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、hash和hashcode"><span class="nav-number">1.</span> <span class="nav-text">一、hash和hashcode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、百度百科对于hash的解释"><span class="nav-number">1.1.</span> <span class="nav-text">1、百度百科对于hash的解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、hashcode"><span class="nav-number">1.2.</span> <span class="nav-text">2、hashcode</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、hashcode的应用"><span class="nav-number">2.</span> <span class="nav-text">二、hashcode的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、对象的hashcode和equals方法"><span class="nav-number">2.1.</span> <span class="nav-text">1、对象的hashcode和equals方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、HashMap"><span class="nav-number">2.2.</span> <span class="nav-text">2、HashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、ConcurrentHashMap"><span class="nav-number">2.3.</span> <span class="nav-text">3、ConcurrentHashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、hash冲突"><span class="nav-number">2.4.</span> <span class="nav-text">4、hash冲突</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、总结"><span class="nav-number">3.</span> <span class="nav-text">三、总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
