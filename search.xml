@@ -207,6 +207,45 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo发布博客常用命令</title>
+    <url>/2021/01/06/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
+<span id="more"></span>
+
+<h4 id="1、创建，预览和发布"><a href="#1、创建，预览和发布" class="headerlink" title="1、创建，预览和发布"></a>1、创建，预览和发布</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">完成命令</span><br><span class="line">    hexo new &quot;postName&quot; #新建文章</span><br><span class="line">    hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">    hexo generate #生成静态页面至public目录</span><br><span class="line">    hexo server #开启预览访问端口（默认端口4000，&#x27;ctrl + c&#x27;关闭server）</span><br><span class="line">    hexo deploy #部署到GitHub</span><br><span class="line">    hexo help  # 查看帮助</span><br><span class="line">    hexo version  #查看Hexo的版本</span><br><span class="line">缩写：</span><br><span class="line">    hexo n == hexo new</span><br><span class="line">    hexo g == hexo generate</span><br><span class="line">    hexo s == hexo server</span><br><span class="line">    hexo d == hexo deploy</span><br><span class="line">组合：</span><br><span class="line">	hexo s -g #生成并本地预览</span><br><span class="line">	hexo d -g #生成并上传</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、字体修改"><a href="#2、字体修改" class="headerlink" title="2、字体修改"></a>2、字体修改</h4><ul>
+<li><p>找到主题的配置文件：D:\GitLocalLibrary\hexo\themes\hexo-theme-next\<strong>_config.yml</strong> </p>
+</li>
+<li><p>找到font配置项，如下图：</p>
+<img src="hexo常用命令及配置/字体.PNG" style="zoom:50%;" />
+
+<p>global为全局配置项，family设置字体（Noto Serif SC），size设置大小（默认是1，就是16px），我用的是0.8</p>
+</li>
+</ul>
+<h4 id="3、使用Typora写博客，上传图片问题"><a href="#3、使用Typora写博客，上传图片问题" class="headerlink" title="3、使用Typora写博客，上传图片问题"></a>3、使用Typora写博客，上传图片问题</h4><p>参考文章：</p>
+<p><a href="http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/">http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/</a></p>
+<p>注意点：</p>
+<ul>
+<li><p>插件下载</p>
+</li>
+<li><p>图片路径修改</p>
+</li>
+<li><p>存放图片的文件夹</p>
+</li>
+<li><p>在Typora上有配置项，可以在复制的时候将图片同步复制到对应目录下面</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/image-20210724101758547.png" alt="image-20210724101758547"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>java动态代理</title>
     <url>/2021/02/28/java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<p>java静态代理和动态代理，并总结主要应用场景。</p>
@@ -283,39 +322,17 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo发布博客常用命令</title>
-    <url>/2021/01/06/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
+    <title>putty导出日志乱字符</title>
+    <url>/2021/01/24/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6/</url>
+    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
 <span id="more"></span>
 
-<h4 id="1、创建，预览和发布"><a href="#1、创建，预览和发布" class="headerlink" title="1、创建，预览和发布"></a>1、创建，预览和发布</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">完成命令</span><br><span class="line">    hexo new &quot;postName&quot; #新建文章</span><br><span class="line">    hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">    hexo generate #生成静态页面至public目录</span><br><span class="line">    hexo server #开启预览访问端口（默认端口4000，&#x27;ctrl + c&#x27;关闭server）</span><br><span class="line">    hexo deploy #部署到GitHub</span><br><span class="line">    hexo help  # 查看帮助</span><br><span class="line">    hexo version  #查看Hexo的版本</span><br><span class="line">缩写：</span><br><span class="line">    hexo n == hexo new</span><br><span class="line">    hexo g == hexo generate</span><br><span class="line">    hexo s == hexo server</span><br><span class="line">    hexo d == hexo deploy</span><br><span class="line">组合：</span><br><span class="line">	hexo s -g #生成并本地预览</span><br><span class="line">	hexo d -g #生成并上传</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、字体修改"><a href="#2、字体修改" class="headerlink" title="2、字体修改"></a>2、字体修改</h4><ul>
-<li><p>找到主题的配置文件：D:\GitLocalLibrary\hexo\themes\hexo-theme-next\<strong>_config.yml</strong> </p>
-</li>
-<li><p>找到font配置项，如下图：</p>
-<img src="hexo常用命令及配置/字体.PNG" style="zoom:50%;" />
-
-<p>global为全局配置项，family设置字体（Noto Serif SC），size设置大小（默认是1，就是16px），我用的是0.8</p>
-</li>
-</ul>
-<h4 id="3、使用Typora写博客，上传图片问题"><a href="#3、使用Typora写博客，上传图片问题" class="headerlink" title="3、使用Typora写博客，上传图片问题"></a>3、使用Typora写博客，上传图片问题</h4><p>参考文章：</p>
-<p><a href="http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/">http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/</a></p>
-<p>注意点：</p>
-<ul>
-<li><p>插件下载</p>
-</li>
-<li><p>图片路径修改</p>
-</li>
-<li><p>存放图片的文件夹</p>
-</li>
-<li><p>在Typora上有配置项，可以在复制的时候将图片同步复制到对应目录下面</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/image-20210724101758547.png" alt="image-20210724101758547"></p>
-</li>
-</ul>
+<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
+<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
 ]]></content>
       <categories>
-        <category>hexo</category>
+        <category>putty</category>
       </categories>
       <tags>
         <tag>工具</tag>
@@ -342,6 +359,15 @@
       </categories>
   </entry>
   <entry>
+    <title>可视化的监控 spring-boot 程序的运行状态</title>
+    <url>/2021/03/11/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81/</url>
+    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
+<span id="more"></span>]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
     <title> springboot读取配置文件</title>
     <url>/2021/02/28/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
@@ -355,54 +381,6 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
 
 ]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>putty导出日志乱字符</title>
-    <url>/2021/01/24/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6/</url>
-    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
-<span id="more"></span>
-
-<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
-<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
-]]></content>
-      <categories>
-        <category>putty</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>typora上传图片</title>
-    <url>/2021/02/28/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/</url>
-    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
-<span id="more"></span>
-
-<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
-<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
-<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
-<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
-<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
-]]></content>
-      <categories>
-        <category>typora</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可视化的监控 spring-boot 程序的运行状态</title>
-    <url>/2021/03/11/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81/</url>
-    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
-<span id="more"></span>]]></content>
       <categories>
         <category>SpringBoot</category>
       </categories>
@@ -436,6 +414,28 @@
       <categories>
         <category>SpringBoot</category>
       </categories>
+  </entry>
+  <entry>
+    <title>typora上传图片</title>
+    <url>/2021/02/28/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/</url>
+    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
+<span id="more"></span>
+
+<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
+<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
+<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
+<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
+<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
+]]></content>
+      <categories>
+        <category>typora</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
   </entry>
   <entry>
     <title>自定义注解</title>
