@@ -99,23 +99,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Sublime配置java运行环境</title>
-    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
-    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
-<span id="more"></span>
-
-<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
-
-<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SpringMVC流程源码分析</title>
     <url>/SpringMVC%E6%B5%81%E7%A8%8B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-05927be942ce/</url>
     <content><![CDATA[<p>项目启动扫描url，并存储，用户发起请求，前端控制器根据url分发请求</p>
@@ -173,37 +156,20 @@
       </categories>
   </entry>
   <entry>
-    <title>for循环常见用法</title>
-    <url>/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95-5ff8a43fd614/</url>
-    <content><![CDATA[<blockquote>
-<p>前段时间由于项目中使用的for循环较多，踩了一些坑，在此记录一下</p>
-</blockquote>
+    <title>Sublime配置java运行环境</title>
+    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
+    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
 <span id="more"></span>
 
-<h3 id="一、for循环使用方式"><a href="#一、for循环使用方式" class="headerlink" title="一、for循环使用方式"></a>一、for循环使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1、fori循环</span><br><span class="line">2、Interator迭代器循环</span><br><span class="line">3、foreach增强循环</span><br><span class="line">4、lamda表达式</span><br></pre></td></tr></table></figure>
+<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="二、注意点"><a href="#二、注意点" class="headerlink" title="二、注意点"></a>二、注意点</h3><ol>
-<li><p>删除使用迭代器：每次删除都会导致集合内容的变化，导致下标变化，数组溢出</p>
-</li>
-<li><p>多层for循环跳出：</p>
-<p>（1）break ：跳出内层循环</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line">输出：j每次都是到2结束，i一直到4</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=1 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=2 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=3 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=4 | j=0</span><br><span class="line">i=4 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
 
-<p>（2）break out：在外层循环之前添加 out: 标签，跳出外层循环</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break out;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
 
-<p>（3）continue：此次循环不再往下执行，跳到下一次循环</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">        System.out.println(&quot;j=&quot;+j);</span><br><span class="line">        if(j==1)&#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：j=1时，没有输出，直接到下一次循环</span><br><span class="line">j=0</span><br><span class="line">执行内层循环</span><br><span class="line">j=1</span><br><span class="line">j=2</span><br><span class="line">执行内层循环</span><br><span class="line">j=3</span><br><span class="line">执行内层循环</span><br><span class="line">j=4</span><br><span class="line">执行内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
-
-<p>（4）continue out：使用out：标签，与break out用法类似</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123; </span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==0)&#123;</span><br><span class="line">                continue out;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：每次j=0就直接进入外层循环的下一次</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=4 | j=0</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure></li>
-</ol>
 ]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
       <tags>
-        <tag>集合</tag>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -244,92 +210,6 @@
       <tags>
         <tag>工具</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>linux命令记录</title>
-    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
-    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
-<span id="more"></span>
-
-<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
-<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
-</li>
-<li><p>安装vim命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>putty导出日志乱字符</title>
-    <url>/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6-0baf9af30b24/</url>
-    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
-<span id="more"></span>
-
-<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
-<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
-]]></content>
-      <categories>
-        <category>putty</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title> springboot读取配置文件</title>
-    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
-    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
-<span id="more"></span>
-
-<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>typora上传图片</title>
-    <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
-    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
-<span id="more"></span>
-
-<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
-<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
-<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
-<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
-<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
-]]></content>
-      <categories>
-        <category>typora</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可视化的监控 spring-boot 程序的运行状态</title>
-    <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
-    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
-<span id="more"></span>]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
   </entry>
   <entry>
     <title>java动态代理</title>
@@ -408,22 +288,114 @@
       </tags>
   </entry>
   <entry>
-    <title>测试文件加密</title>
-    <url>/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，这个密码看着不太对，请再试试。" data-whm="抱歉，这个文章不能被纠正，不过您还是能看看解密后的内容。">
-  <script id="hbeData" type="hbeData" data-hmacdigest="eb8a803bb67cb2a094eb9ad7f8de51f644d4db944b9b7ec8a152727f6fd3c0fb">4f9d6c703ece105168ceb7dec42064620bb84448cee931f825eaa3c5ae7c8bbf6f482576ebd08f86f86b45723917cd1f48b5056848233e462ade634c2fae0cc16e6cffcdb36ec69d6b347c06d0a03a5972711b1b815b20e52bb9b4eacce07fae</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好，这里需要密码。</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+    <title>for循环常见用法</title>
+    <url>/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95-5ff8a43fd614/</url>
+    <content><![CDATA[<blockquote>
+<p>前段时间由于项目中使用的for循环较多，踩了一些坑，在此记录一下</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="一、for循环使用方式"><a href="#一、for循环使用方式" class="headerlink" title="一、for循环使用方式"></a>一、for循环使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1、fori循环</span><br><span class="line">2、Interator迭代器循环</span><br><span class="line">3、foreach增强循环</span><br><span class="line">4、lamda表达式</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、注意点"><a href="#二、注意点" class="headerlink" title="二、注意点"></a>二、注意点</h3><ol>
+<li><p>删除使用迭代器：每次删除都会导致集合内容的变化，导致下标变化，数组溢出</p>
+</li>
+<li><p>多层for循环跳出：</p>
+<p>（1）break ：跳出内层循环</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line">输出：j每次都是到2结束，i一直到4</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=1 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=2 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=3 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=4 | j=0</span><br><span class="line">i=4 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+
+<p>（2）break out：在外层循环之前添加 out: 标签，跳出外层循环</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break out;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+
+<p>（3）continue：此次循环不再往下执行，跳到下一次循环</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">        System.out.println(&quot;j=&quot;+j);</span><br><span class="line">        if(j==1)&#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：j=1时，没有输出，直接到下一次循环</span><br><span class="line">j=0</span><br><span class="line">执行内层循环</span><br><span class="line">j=1</span><br><span class="line">j=2</span><br><span class="line">执行内层循环</span><br><span class="line">j=3</span><br><span class="line">执行内层循环</span><br><span class="line">j=4</span><br><span class="line">执行内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+
+<p>（4）continue out：使用out：标签，与break out用法类似</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123; </span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==0)&#123;</span><br><span class="line">                continue out;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：每次j=0就直接进入外层循环的下一次</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=4 | j=0</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
       <tags>
-        <tag>life</tag>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux命令记录</title>
+    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
+    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
+<span id="more"></span>
+
+<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
+<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
+</li>
+<li><p>安装vim命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title> springboot读取配置文件</title>
+    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
+    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
+<span id="more"></span>
+
+<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>putty导出日志乱字符</title>
+    <url>/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6-0baf9af30b24/</url>
+    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
+<span id="more"></span>
+
+<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
+<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
+]]></content>
+      <categories>
+        <category>putty</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>typora上传图片</title>
+    <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
+    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
+<span id="more"></span>
+
+<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
+<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
+<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
+<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
+<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
+]]></content>
+      <categories>
+        <category>typora</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -455,6 +427,34 @@
       <categories>
         <category>SpringBoot</category>
       </categories>
+  </entry>
+  <entry>
+    <title>可视化的监控 spring-boot 程序的运行状态</title>
+    <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
+    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
+<span id="more"></span>]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>测试文件加密</title>
+    <url>/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，这个密码看着不太对，请再试试。" data-whm="抱歉，这个文章不能被纠正，不过您还是能看看解密后的内容。">
+  <script id="hbeData" type="hbeData" data-hmacdigest="eb8a803bb67cb2a094eb9ad7f8de51f644d4db944b9b7ec8a152727f6fd3c0fb">4f9d6c703ece105168ceb7dec42064620bb84448cee931f825eaa3c5ae7c8bbf6f482576ebd08f86f86b45723917cd1f48b5056848233e462ade634c2fae0cc16e6cffcdb36ec69d6b347c06d0a03a5972711b1b815b20e52bb9b4eacce07fae</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好，这里需要密码。</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>life</tag>
+      </tags>
   </entry>
   <entry>
     <title>自定义注解</title>
