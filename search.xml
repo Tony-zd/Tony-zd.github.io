@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hashmap源码分析</title>
-    <url>/Hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-7ab6c0ae5920/</url>
-    <content><![CDATA[<p>最近简单读了一下hashmap的源码</p>
-<span id="more"></span>
-
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;<span class="comment">//可序列化</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16，默认大小16,2的幂次方</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;<span class="comment">// 最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;<span class="comment">//加载因子，16*0.75=12，达到12时进行扩容</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;<span class="comment">//转成红黑树临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;<span class="comment">//转成链表临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;<span class="comment">//数组长度临界点、</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;<span class="comment">//node数组</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="基础节点结构"><a href="#基础节点结构" class="headerlink" title="基础节点结构"></a>基础节点结构</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;<span class="comment">//key的hash值</span></span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//初始容量小于0，则报错</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal initial capacity: &quot;</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="comment">//初始容量大于1&lt;&lt;30,则容量为1&lt;&lt;30；这里注意看下扩容时的代码，看下最大值是什么</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="comment">//加载因子校验</span></span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="tableSizeFor方法"><a href="#tableSizeFor方法" class="headerlink" title="tableSizeFor方法"></a>tableSizeFor方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//找到大于或等于 cap 的最小2的幂</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="putVar方法"><a href="#putVar方法" class="headerlink" title="putVar方法"></a>putVar方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注意括号中进行了大量的赋值操作</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="params"><span class="function">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个空的node数组，节点p，两个变量</span></span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">//进行赋值操作，n为数组长度，数组是null或者长度为0，则进行初始化</span></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="comment">//hashmap的hash算法，初始化节点给p，然后将key、value放进去</span></span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//这里的e就是要put的节点</span></span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="comment">//如果key值相同，并且hashcode相同，直接将p赋值给e</span></span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="comment">//如果p是一个二叉树，将值放入</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//当前桶是一个链表，循环链表</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="comment">//找到最后都没有找到，则将新值放入链表尾部</span></span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果找到了，则break跳出循环，后面更新value就可以</span></span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;<span class="comment">//修改p的指针，p指向p的next</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新值，并返回旧值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="comment">//判断大小有没有超过阈值，超过了需要扩容</span></span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    <span class="comment">//这个方法在LinkedHashMap中重写了，保证顺序</span></span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">p = tab[i = (n - <span class="number">1</span>) &amp; hash</span><br><span class="line">e = p.next</span><br><span class="line">p = e</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>集合</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HashMap原理</title>
     <url>/HashMap%E5%8E%9F%E7%90%86-01cf3a29ddde/</url>
     <content><![CDATA[<p>哈哈</p>
@@ -91,6 +63,34 @@
 <li>链表</li>
 </ul>
 <h3 id=""><a href="#" class="headerlink" title=""></a></h3>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hashmap源码分析</title>
+    <url>/Hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-7ab6c0ae5920/</url>
+    <content><![CDATA[<p>最近简单读了一下hashmap的源码</p>
+<span id="more"></span>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;<span class="comment">//可序列化</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16，默认大小16,2的幂次方</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;<span class="comment">// 最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;<span class="comment">//加载因子，16*0.75=12，达到12时进行扩容</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;<span class="comment">//转成红黑树临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;<span class="comment">//转成链表临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;<span class="comment">//数组长度临界点、</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;<span class="comment">//node数组</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="基础节点结构"><a href="#基础节点结构" class="headerlink" title="基础节点结构"></a>基础节点结构</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;<span class="comment">//key的hash值</span></span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//初始容量小于0，则报错</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal initial capacity: &quot;</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="comment">//初始容量大于1&lt;&lt;30,则容量为1&lt;&lt;30；这里注意看下扩容时的代码，看下最大值是什么</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="comment">//加载因子校验</span></span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="tableSizeFor方法"><a href="#tableSizeFor方法" class="headerlink" title="tableSizeFor方法"></a>tableSizeFor方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//找到大于或等于 cap 的最小2的幂</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="putVar方法"><a href="#putVar方法" class="headerlink" title="putVar方法"></a>putVar方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注意括号中进行了大量的赋值操作</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="params"><span class="function">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个空的node数组，节点p，两个变量</span></span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">//进行赋值操作，n为数组长度，数组是null或者长度为0，则进行初始化</span></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="comment">//hashmap的hash算法，初始化节点给p，然后将key、value放进去</span></span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//这里的e就是要put的节点</span></span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="comment">//如果key值相同，并且hashcode相同，直接将p赋值给e</span></span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="comment">//如果p是一个二叉树，将值放入</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//当前桶是一个链表，循环链表</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="comment">//找到最后都没有找到，则将新值放入链表尾部</span></span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果找到了，则break跳出循环，后面更新value就可以</span></span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;<span class="comment">//修改p的指针，p指向p的next</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新值，并返回旧值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="comment">//判断大小有没有超过阈值，超过了需要扩容</span></span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    <span class="comment">//这个方法在LinkedHashMap中重写了，保证顺序</span></span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">p = tab[i = (n - <span class="number">1</span>) &amp; hash</span><br><span class="line">e = p.next</span><br><span class="line">p = e</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -170,6 +170,40 @@
 ]]></content>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>for循环常见用法</title>
+    <url>/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95-5ff8a43fd614/</url>
+    <content><![CDATA[<blockquote>
+<p>前段时间由于项目中使用的for循环较多，踩了一些坑，在此记录一下</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="一、for循环使用方式"><a href="#一、for循环使用方式" class="headerlink" title="一、for循环使用方式"></a>一、for循环使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1、fori循环</span><br><span class="line">2、Interator迭代器循环</span><br><span class="line">3、foreach增强循环</span><br><span class="line">4、lamda表达式</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、注意点"><a href="#二、注意点" class="headerlink" title="二、注意点"></a>二、注意点</h3><ol>
+<li><p>删除使用迭代器：每次删除都会导致集合内容的变化，导致下标变化，数组溢出</p>
+</li>
+<li><p>多层for循环跳出：</p>
+<p>（1）break ：跳出内层循环</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line">输出：j每次都是到2结束，i一直到4</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=1 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=2 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=3 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=4 | j=0</span><br><span class="line">i=4 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+
+<p>（2）break out：在外层循环之前添加 out: 标签，跳出外层循环</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break out;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+
+<p>（3）continue：此次循环不再往下执行，跳到下一次循环</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">        System.out.println(&quot;j=&quot;+j);</span><br><span class="line">        if(j==1)&#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：j=1时，没有输出，直接到下一次循环</span><br><span class="line">j=0</span><br><span class="line">执行内层循环</span><br><span class="line">j=1</span><br><span class="line">j=2</span><br><span class="line">执行内层循环</span><br><span class="line">j=3</span><br><span class="line">执行内层循环</span><br><span class="line">j=4</span><br><span class="line">执行内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
+
+<p>（4）continue out：使用out：标签，与break out用法类似</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123; </span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==0)&#123;</span><br><span class="line">                continue out;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：每次j=0就直接进入外层循环的下一次</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=4 | j=0</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>集合</tag>
       </tags>
   </entry>
   <entry>
@@ -288,37 +322,25 @@
       </tags>
   </entry>
   <entry>
-    <title>for循环常见用法</title>
-    <url>/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95-5ff8a43fd614/</url>
-    <content><![CDATA[<blockquote>
-<p>前段时间由于项目中使用的for循环较多，踩了一些坑，在此记录一下</p>
-</blockquote>
+    <title>typora上传图片</title>
+    <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
+    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
 <span id="more"></span>
 
-<h3 id="一、for循环使用方式"><a href="#一、for循环使用方式" class="headerlink" title="一、for循环使用方式"></a>一、for循环使用方式</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1、fori循环</span><br><span class="line">2、Interator迭代器循环</span><br><span class="line">3、foreach增强循环</span><br><span class="line">4、lamda表达式</span><br></pre></td></tr></table></figure>
+<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
+<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
+<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
+<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
 
-<h3 id="二、注意点"><a href="#二、注意点" class="headerlink" title="二、注意点"></a>二、注意点</h3><ol>
-<li><p>删除使用迭代器：每次删除都会导致集合内容的变化，导致下标变化，数组溢出</p>
-</li>
-<li><p>多层for循环跳出：</p>
-<p>（1）break ：跳出内层循环</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line">输出：j每次都是到2结束，i一直到4</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=1 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=2 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=3 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">i=4 | j=0</span><br><span class="line">i=4 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
-
-<p>（2）break out：在外层循环之前添加 out: 标签，跳出外层循环</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==1)&#123;</span><br><span class="line">                System.out.println(&quot;查询成功，跳出内层循环&quot;);</span><br><span class="line">                break out;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=0 | j=1</span><br><span class="line">查询成功，跳出内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
-
-<p>（3）continue：此次循环不再往下执行，跳到下一次循环</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123;</span><br><span class="line">    for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">        System.out.println(&quot;j=&quot;+j);</span><br><span class="line">        if(j==1)&#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：j=1时，没有输出，直接到下一次循环</span><br><span class="line">j=0</span><br><span class="line">执行内层循环</span><br><span class="line">j=1</span><br><span class="line">j=2</span><br><span class="line">执行内层循环</span><br><span class="line">j=3</span><br><span class="line">执行内层循环</span><br><span class="line">j=4</span><br><span class="line">执行内层循环</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure>
-
-<p>（4）continue out：使用out：标签，与break out用法类似</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public static void testForOut()&#123; </span><br><span class="line">    out:for (int i = 0; i &lt; 5; i++) &#123;</span><br><span class="line">        for (int j = 0; j &lt; 5; j++) &#123;</span><br><span class="line">            System.out.println(&quot;i=&quot;+i+&quot; | j=&quot;+j);</span><br><span class="line">            if(j==0)&#123;</span><br><span class="line">                continue out;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;执行内层循环&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(&quot;循环结束&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：每次j=0就直接进入外层循环的下一次</span><br><span class="line">i=0 | j=0</span><br><span class="line">i=1 | j=0</span><br><span class="line">i=2 | j=0</span><br><span class="line">i=3 | j=0</span><br><span class="line">i=4 | j=0</span><br><span class="line">循环结束</span><br></pre></td></tr></table></figure></li>
-</ol>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
+<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
 ]]></content>
       <categories>
-        <category>Java</category>
+        <category>typora</category>
       </categories>
       <tags>
-        <tag>集合</tag>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -339,6 +361,15 @@
 ]]></content>
       <categories>
         <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>可视化的监控 spring-boot 程序的运行状态</title>
+    <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
+    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
+<span id="more"></span>]]></content>
+      <categories>
+        <category>SpringBoot</category>
       </categories>
   </entry>
   <entry>
@@ -375,67 +406,6 @@
       <tags>
         <tag>工具</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>typora上传图片</title>
-    <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
-    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
-<span id="more"></span>
-
-<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
-<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
-<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
-<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
-<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
-]]></content>
-      <categories>
-        <category>typora</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>监控 spring-boot 的启动和运行状态</title>
-    <url>/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/</url>
-    <content><![CDATA[<p>spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态</p>
-<span id="more"></span>
-
-<h3 id="添加监控场景依赖"><a href="#添加监控场景依赖" class="headerlink" title="添加监控场景依赖"></a>添加监控场景依赖</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"><a href="#可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性" class="headerlink" title="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"></a>可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>指定用户访问</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 若要访问端点信息，需要配置用户名和密码</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">sunt</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure></li>
-<li><p>不限定用户访问</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 所有的用户都可以用Actuator</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果<code>management.security.enabled</code>的值是false的话，除开health接口还依赖<code>endpoints.health.sensitive</code>的配置外，其他接口都不需要输入用户名和密码了</li>
-<li>actuator暴露的health接口权限是由两个配置： <code>management.security.enabled</code> 和 <code>endpoints.health.sensitive</code>组合的结果进行返回的。</li>
-</ul>
-</li>
-<li><p>所有可查看接口</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg"></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>可视化的监控 spring-boot 程序的运行状态</title>
-    <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
-    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
-<span id="more"></span>]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
   </entry>
   <entry>
     <title>测试文件加密</title>
@@ -505,5 +475,35 @@
       <tags>
         <tag>反射</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>监控 spring-boot 的启动和运行状态</title>
+    <url>/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/</url>
+    <content><![CDATA[<p>spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态</p>
+<span id="more"></span>
+
+<h3 id="添加监控场景依赖"><a href="#添加监控场景依赖" class="headerlink" title="添加监控场景依赖"></a>添加监控场景依赖</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"><a href="#可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性" class="headerlink" title="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"></a>可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>指定用户访问</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 若要访问端点信息，需要配置用户名和密码</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">sunt</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure></li>
+<li><p>不限定用户访问</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 所有的用户都可以用Actuator</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果<code>management.security.enabled</code>的值是false的话，除开health接口还依赖<code>endpoints.health.sensitive</code>的配置外，其他接口都不需要输入用户名和密码了</li>
+<li>actuator暴露的health接口权限是由两个配置： <code>management.security.enabled</code> 和 <code>endpoints.health.sensitive</code>组合的结果进行返回的。</li>
+</ul>
+</li>
+<li><p>所有可查看接口</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
   </entry>
 </search>
