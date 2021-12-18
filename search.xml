@@ -156,23 +156,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Sublime配置java运行环境</title>
-    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
-    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
-<span id="more"></span>
-
-<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
-
-<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>for循环常见用法</title>
     <url>/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95-5ff8a43fd614/</url>
     <content><![CDATA[<blockquote>
@@ -204,6 +187,23 @@
       </categories>
       <tags>
         <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Sublime配置java运行环境</title>
+    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
+    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
+<span id="more"></span>
+
+<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>工具</tag>
       </tags>
   </entry>
   <entry>
@@ -244,6 +244,26 @@
       <tags>
         <tag>工具</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>linux命令记录</title>
+    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
+    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
+<span id="more"></span>
+
+<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
+<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
+</li>
+<li><p>安装vim命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
   </entry>
   <entry>
     <title>java动态代理</title>
@@ -322,6 +342,58 @@
       </tags>
   </entry>
   <entry>
+    <title>list常见去重方式</title>
+    <url>/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/</url>
+    <content><![CDATA[<p>简单写一下常见的list去重方式</p>
+<span id="more"></span>
+
+<p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> collection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDumplicateRemove</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用contains方法，底层调用的是equals方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">listDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; newParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; params.size(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!newParams.contains(params.get(i)))&#123;</span><br><span class="line">                newParams.add(params.get(i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * treeset</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//直接加进去</span></span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * hashset去重</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove1</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用stream流去重，jdk版本不低于1.8</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">streamDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; integerList = params.stream().distinct().collect(Collectors.toList());</span><br><span class="line">        System.out.println(integerList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; testParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        listDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove1(testParams);</span><br><span class="line">        streamDumplicateRemove(testParams);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>putty导出日志乱字符</title>
+    <url>/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6-0baf9af30b24/</url>
+    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
+<span id="more"></span>
+
+<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
+<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
+]]></content>
+      <categories>
+        <category>putty</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title> springboot读取配置文件</title>
+    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
+    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
+<span id="more"></span>
+
+<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
     <title>typora上传图片</title>
     <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
     <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
@@ -344,23 +416,33 @@
       </tags>
   </entry>
   <entry>
-    <title>linux命令记录</title>
-    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
-    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
+    <title>监控 spring-boot 的启动和运行状态</title>
+    <url>/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/</url>
+    <content><![CDATA[<p>spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态</p>
 <span id="more"></span>
 
-<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
-<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
+<h3 id="添加监控场景依赖"><a href="#添加监控场景依赖" class="headerlink" title="添加监控场景依赖"></a>添加监控场景依赖</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
+<h4 id="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"><a href="#可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性" class="headerlink" title="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"></a>可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>指定用户访问</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 若要访问端点信息，需要配置用户名和密码</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">sunt</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure></li>
+<li><p>不限定用户访问</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 所有的用户都可以用Actuator</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果<code>management.security.enabled</code>的值是false的话，除开health接口还依赖<code>endpoints.health.sensitive</code>的配置外，其他接口都不需要输入用户名和密码了</li>
+<li>actuator暴露的health接口权限是由两个配置： <code>management.security.enabled</code> 和 <code>endpoints.health.sensitive</code>组合的结果进行返回的。</li>
+</ul>
 </li>
-<li><p>安装vim命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
-</ol>
+<li><p>所有可查看接口</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg"></p>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>SpringBoot</category>
       </categories>
   </entry>
   <entry>
@@ -371,41 +453,6 @@
       <categories>
         <category>SpringBoot</category>
       </categories>
-  </entry>
-  <entry>
-    <title> springboot读取配置文件</title>
-    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
-    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
-<span id="more"></span>
-
-<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>putty导出日志乱字符</title>
-    <url>/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6-0baf9af30b24/</url>
-    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
-<span id="more"></span>
-
-<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
-<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
-]]></content>
-      <categories>
-        <category>putty</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
   </entry>
   <entry>
     <title>测试文件加密</title>
@@ -475,35 +522,5 @@
       <tags>
         <tag>反射</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>监控 spring-boot 的启动和运行状态</title>
-    <url>/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/</url>
-    <content><![CDATA[<p>spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态</p>
-<span id="more"></span>
-
-<h3 id="添加监控场景依赖"><a href="#添加监控场景依赖" class="headerlink" title="添加监控场景依赖"></a>添加监控场景依赖</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"><a href="#可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性" class="headerlink" title="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"></a>可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>指定用户访问</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 若要访问端点信息，需要配置用户名和密码</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">sunt</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure></li>
-<li><p>不限定用户访问</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 所有的用户都可以用Actuator</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果<code>management.security.enabled</code>的值是false的话，除开health接口还依赖<code>endpoints.health.sensitive</code>的配置外，其他接口都不需要输入用户名和密码了</li>
-<li>actuator暴露的health接口权限是由两个配置： <code>management.security.enabled</code> 和 <code>endpoints.health.sensitive</code>组合的结果进行返回的。</li>
-</ul>
-</li>
-<li><p>所有可查看接口</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg"></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
   </entry>
 </search>

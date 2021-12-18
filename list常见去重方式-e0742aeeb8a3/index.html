@@ -20,21 +20,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态">
+  <meta name="description" content="简单写一下常见的list去重方式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="监控 spring-boot 的启动和运行状态">
-<meta property="og:url" content="http://example.com/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/index.html">
+<meta property="og:title" content="list常见去重方式">
+<meta property="og:url" content="http://example.com/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/index.html">
 <meta property="og:site_name" content="打怪中">
-<meta property="og:description" content="spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态">
+<meta property="og:description" content="简单写一下常见的list去重方式">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg">
-<meta property="article:published_time" content="2021-03-09T22:16:12.000Z">
-<meta property="article:modified_time" content="2021-12-16T01:05:02.441Z">
+<meta property="article:published_time" content="2021-12-18T14:23:38.000Z">
+<meta property="article:modified_time" content="2021-12-18T14:26:16.396Z">
 <meta property="article:author" content="sunt">
+<meta property="article:tag" content="集合">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg">
 
-<link rel="canonical" href="http://example.com/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/">
+<link rel="canonical" href="http://example.com/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/">
 
 
 <script id="page-configurations">
@@ -47,7 +46,7 @@
   };
 </script>
 
-  <title>监控 spring-boot 的启动和运行状态 | 打怪中</title>
+  <title>list常见去重方式 | 打怪中</title>
   
 
 
@@ -192,7 +191,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo1.jpg">
@@ -205,7 +204,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          监控 spring-boot 的启动和运行状态
+          list常见去重方式
         </h1>
 
         <div class="post-meta">
@@ -214,23 +213,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-03-10 06:16:12" itemprop="dateCreated datePublished" datetime="2021-03-10T06:16:12+08:00">2021-03-10</time>
+              <time title="创建时间：2021-12-18 22:23:38 / 修改时间：22:26:16" itemprop="dateCreated datePublished" datetime="2021-12-18T22:23:38+08:00">2021-12-18</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-16 09:05:02" itemprop="dateModified" datetime="2021-12-16T09:05:02+08:00">2021-12-16</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
                 </span>
             </span>
 
@@ -252,28 +245,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>spring-boot 集成 spring-boot-starter-actuator 用于监控 spring-boot 的启动和运行状态</p>
+        <p>简单写一下常见的list去重方式</p>
 <span id="more"></span>
 
-<h3 id="添加监控场景依赖"><a href="#添加监控场景依赖" class="headerlink" title="添加监控场景依赖"></a>添加监控场景依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> collection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDumplicateRemove</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用contains方法，底层调用的是equals方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">listDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; newParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; params.size(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!newParams.contains(params.get(i)))&#123;</span><br><span class="line">                newParams.add(params.get(i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * treeset</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//直接加进去</span></span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * hashset去重</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove1</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用stream流去重，jdk版本不低于1.8</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">streamDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; integerList = params.stream().distinct().collect(Collectors.toList());</span><br><span class="line">        System.out.println(integerList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; testParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        listDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove1(testParams);</span><br><span class="line">        streamDumplicateRemove(testParams);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<h4 id="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"><a href="#可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性" class="headerlink" title="可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性"></a>可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>指定用户访问</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 若要访问端点信息，需要配置用户名和密码</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">sunt</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure></li>
-<li><p>不限定用户访问</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 所有的用户都可以用Actuator</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果<code>management.security.enabled</code>的值是false的话，除开health接口还依赖<code>endpoints.health.sensitive</code>的配置外，其他接口都不需要输入用户名和密码了</li>
-<li>actuator暴露的health接口权限是由两个配置： <code>management.security.enabled</code> 和 <code>endpoints.health.sensitive</code>组合的结果进行返回的。</li>
-</ul>
-</li>
-<li><p>所有可查看接口</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216090500.jpg"></p>
-</li>
-</ul>
 
     </div>
 
@@ -289,7 +266,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://example.com/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/" title="监控 spring-boot 的启动和运行状态">http://example.com/监控-spring-boot-的启动和运行状态-540e65ce225d/</a>
+    <a href="http://example.com/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/" title="list常见去重方式">http://example.com/list常见去重方式-e0742aeeb8a3/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -299,6 +276,9 @@
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9B%86%E5%90%88/" rel="tag"># 集合</a>
+          </div>
 
         
 
@@ -306,13 +286,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/" rel="prev" title=" springboot读取配置文件">
-      <i class="fa fa-chevron-left"></i>  springboot读取配置文件
+    <a href="/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/" rel="prev" title="测试文件加密">
+      <i class="fa fa-chevron-left"></i> 测试文件加密
     </a></div>
-      <div class="post-nav-item">
-    <a href="/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/" rel="next" title="可视化的监控 spring-boot 程序的运行状态">
-      可视化的监控 spring-boot 程序的运行状态 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -371,7 +348,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%9B%91%E6%8E%A7%E5%9C%BA%E6%99%AF%E4%BE%9D%E8%B5%96"><span class="nav-number">1.</span> <span class="nav-text">添加监控场景依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E4%BB%A5%E6%B7%BB%E5%8A%A0spring-boot-starter-security%E7%94%A8%E4%BA%8E%E6%8C%87%E5%AE%9A%E7%94%A8%E6%88%B7%E8%AE%BF%E9%97%AEactuator%E6%8E%A5%E5%8F%A3%EF%BC%8C%E6%9D%A5%E4%BF%9D%E8%AF%81actuator%E6%9A%B4%E9%9C%B2%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">可以添加spring-boot-starter-security用于指定用户访问actuator接口，来保证actuator暴露接口的安全性</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
