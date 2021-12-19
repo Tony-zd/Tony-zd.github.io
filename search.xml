@@ -99,6 +99,23 @@
       </tags>
   </entry>
   <entry>
+    <title>Sublime配置java运行环境</title>
+    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
+    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
+<span id="more"></span>
+
+<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringMVC流程源码分析</title>
     <url>/SpringMVC%E6%B5%81%E7%A8%8B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-05927be942ce/</url>
     <content><![CDATA[<p>项目启动扫描url，并存储，用户发起请求，前端控制器根据url分发请求</p>
@@ -190,82 +207,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Sublime配置java运行环境</title>
-    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
-    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
-<span id="more"></span>
-
-<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
-
-<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo发布博客常用命令</title>
-    <url>/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE-e009715b4132/</url>
-    <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
-<span id="more"></span>
-
-<h4 id="1、创建，预览和发布"><a href="#1、创建，预览和发布" class="headerlink" title="1、创建，预览和发布"></a>1、创建，预览和发布</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">完成命令</span><br><span class="line">    hexo new &quot;postName&quot; #新建文章</span><br><span class="line">    hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">    hexo generate #生成静态页面至public目录</span><br><span class="line">    hexo server #开启预览访问端口（默认端口4000，&#x27;ctrl + c&#x27;关闭server）</span><br><span class="line">    hexo deploy #部署到GitHub</span><br><span class="line">    hexo help  # 查看帮助</span><br><span class="line">    hexo version  #查看Hexo的版本</span><br><span class="line">缩写：</span><br><span class="line">    hexo n == hexo new</span><br><span class="line">    hexo g == hexo generate</span><br><span class="line">    hexo s == hexo server</span><br><span class="line">    hexo d == hexo deploy</span><br><span class="line">组合：</span><br><span class="line">	hexo s -g #生成并本地预览</span><br><span class="line">	hexo d -g #生成并上传</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、字体修改"><a href="#2、字体修改" class="headerlink" title="2、字体修改"></a>2、字体修改</h4><ul>
-<li><p>找到主题的配置文件：D:\GitLocalLibrary\hexo\themes\hexo-theme-next\<strong>_config.yml</strong> </p>
-</li>
-<li><p>找到font配置项，如下图：</p>
-<img src="hexo常用命令及配置/字体.PNG" style="zoom:50%;" />
-
-<p>global为全局配置项，family设置字体（Noto Serif SC），size设置大小（默认是1，就是16px），我用的是0.8</p>
-</li>
-</ul>
-<h4 id="3、使用Typora写博客，上传图片问题"><a href="#3、使用Typora写博客，上传图片问题" class="headerlink" title="3、使用Typora写博客，上传图片问题"></a>3、使用Typora写博客，上传图片问题</h4><p>参考文章：</p>
-<p><a href="http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/">http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/</a></p>
-<p>注意点：</p>
-<ul>
-<li><p>插件下载</p>
-</li>
-<li><p>图片路径修改</p>
-</li>
-<li><p>存放图片的文件夹</p>
-</li>
-<li><p>在Typora上有配置项，可以在复制的时候将图片同步复制到对应目录下面</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/image-20210724101758547.png" alt="image-20210724101758547"></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux命令记录</title>
-    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
-    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
-<span id="more"></span>
-
-<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
-<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
-</li>
-<li><p>安装vim命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>java动态代理</title>
     <url>/java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-af4eb1e80218/</url>
     <content><![CDATA[<p>java静态代理和动态代理，并总结主要应用场景。</p>
@@ -342,21 +283,63 @@
       </tags>
   </entry>
   <entry>
-    <title>list常见去重方式</title>
-    <url>/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/</url>
-    <content><![CDATA[<p>简单写一下常见的list去重方式</p>
+    <title>hexo发布博客常用命令</title>
+    <url>/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE-e009715b4132/</url>
+    <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
 <span id="more"></span>
 
-<p>代码如下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> collection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDumplicateRemove</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用contains方法，底层调用的是equals方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">listDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; newParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; params.size(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!newParams.contains(params.get(i)))&#123;</span><br><span class="line">                newParams.add(params.get(i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * treeset</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//直接加进去</span></span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * hashset去重</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove1</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用stream流去重，jdk版本不低于1.8</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">streamDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; integerList = params.stream().distinct().collect(Collectors.toList());</span><br><span class="line">        System.out.println(integerList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; testParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        listDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove1(testParams);</span><br><span class="line">        streamDumplicateRemove(testParams);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="1、创建，预览和发布"><a href="#1、创建，预览和发布" class="headerlink" title="1、创建，预览和发布"></a>1、创建，预览和发布</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">完成命令</span><br><span class="line">    hexo new &quot;postName&quot; #新建文章</span><br><span class="line">    hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">    hexo generate #生成静态页面至public目录</span><br><span class="line">    hexo server #开启预览访问端口（默认端口4000，&#x27;ctrl + c&#x27;关闭server）</span><br><span class="line">    hexo deploy #部署到GitHub</span><br><span class="line">    hexo help  # 查看帮助</span><br><span class="line">    hexo version  #查看Hexo的版本</span><br><span class="line">缩写：</span><br><span class="line">    hexo n == hexo new</span><br><span class="line">    hexo g == hexo generate</span><br><span class="line">    hexo s == hexo server</span><br><span class="line">    hexo d == hexo deploy</span><br><span class="line">组合：</span><br><span class="line">	hexo s -g #生成并本地预览</span><br><span class="line">	hexo d -g #生成并上传</span><br></pre></td></tr></table></figure>
 
+<h4 id="2、字体修改"><a href="#2、字体修改" class="headerlink" title="2、字体修改"></a>2、字体修改</h4><ul>
+<li><p>找到主题的配置文件：D:\GitLocalLibrary\hexo\themes\hexo-theme-next\<strong>_config.yml</strong> </p>
+</li>
+<li><p>找到font配置项，如下图：</p>
+<img src="hexo常用命令及配置/字体.PNG" style="zoom:50%;" />
+
+<p>global为全局配置项，family设置字体（Noto Serif SC），size设置大小（默认是1，就是16px），我用的是0.8</p>
+</li>
+</ul>
+<h4 id="3、使用Typora写博客，上传图片问题"><a href="#3、使用Typora写博客，上传图片问题" class="headerlink" title="3、使用Typora写博客，上传图片问题"></a>3、使用Typora写博客，上传图片问题</h4><p>参考文章：</p>
+<p><a href="http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/">http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/</a></p>
+<p>注意点：</p>
+<ul>
+<li><p>插件下载</p>
+</li>
+<li><p>图片路径修改</p>
+</li>
+<li><p>存放图片的文件夹</p>
+</li>
+<li><p>在Typora上有配置项，可以在复制的时候将图片同步复制到对应目录下面</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/image-20210724101758547.png" alt="image-20210724101758547"></p>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>java</category>
+        <category>hexo</category>
       </categories>
       <tags>
-        <tag>集合</tag>
+        <tag>工具</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>linux命令记录</title>
+    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
+    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
+<span id="more"></span>
+
+<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
+<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
+</li>
+<li><p>安装vim命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
   </entry>
   <entry>
     <title>putty导出日志乱字符</title>
@@ -373,6 +356,32 @@
       </categories>
       <tags>
         <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>list常见去重方式</title>
+    <url>/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/</url>
+    <content><![CDATA[<p>简单写一下常见的list去重方式，并理解实现原理</p>
+<span id="more"></span>
+
+<h4 id="list的contains方法去重"><a href="#list的contains方法去重" class="headerlink" title="list的contains方法去重"></a>list的contains方法去重</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">新建一个list：newParams，遍历原来的list：params，不断地往newParams添加元素，如果newParams存在元素则跳过</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">listDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; newParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; params.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(!newParams.contains(params.get(i)))&#123;</span><br><span class="line">            newParams.add(params.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(newParams);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">这里可以看下contains方法的底层实现，可以看到最终是调用了equals方法进行比较查找，而且是Object类的equals，直接比较两个对象的地址</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> indexOf(o) &gt;= <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">            <span class="keyword">if</span> (elementData[i]==<span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">            <span class="keyword">if</span> (o.equals(elementData[i]))</span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="利用TreeSet去重"><a href="#利用TreeSet去重" class="headerlink" title="利用TreeSet去重"></a>利用TreeSet去重</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">    Set&lt;Integer&gt; newParams = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">    newParams.addAll(params);</span><br><span class="line">    System.out.println(newParams);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//还是看下源码，这里分析的是add方法，上面用的addAll，问题不大。</span></span><br><span class="line"><span class="comment">//add方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这里的m其实是一个TreeMap，也就是说TreeSet其实是在操作TreeMap</span></span><br><span class="line">    <span class="keyword">return</span> m.put(e, PRESENT)==<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//TreeMap的put方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    Entry&lt;K,V&gt; t = root;</span><br><span class="line">    <span class="comment">//判断根节点有没有值，没有则添加</span></span><br><span class="line">    <span class="keyword">if</span> (t == <span class="keyword">null</span>) &#123;</span><br><span class="line">        compare(key, key); <span class="comment">// type (and possibly null) check</span></span><br><span class="line"></span><br><span class="line">        root = <span class="keyword">new</span> Entry&lt;&gt;(key, value, <span class="keyword">null</span>);</span><br><span class="line">        size = <span class="number">1</span>;</span><br><span class="line">        modCount++;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> cmp;</span><br><span class="line">    Entry&lt;K,V&gt; parent;</span><br><span class="line">    <span class="comment">// split comparator and comparable paths</span></span><br><span class="line">    <span class="comment">//这边分为两种，一种是实现了comparator接口，通过compare方法比较，这里的实现是通过匿名内部类的方式实现，是一种函数式接口；另外一种则是目标类实现了Comparable接口，通过compareTo方法比较。</span></span><br><span class="line">    Comparator&lt;? <span class="keyword">super</span> K&gt; cpr = comparator;</span><br><span class="line">    <span class="keyword">if</span> (cpr != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            parent = t;</span><br><span class="line">            cmp = cpr.compare(key, t.key);</span><br><span class="line">            <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)</span><br><span class="line">                t = t.left;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)</span><br><span class="line">                t = t.right;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> t.setValue(value);</span><br><span class="line">        &#125; <span class="keyword">while</span> (t != <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">            Comparable&lt;? <span class="keyword">super</span> K&gt; k = (Comparable&lt;? <span class="keyword">super</span> K&gt;) key;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            parent = t;</span><br><span class="line">            cmp = k.compareTo(t.key);</span><br><span class="line">            <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)</span><br><span class="line">                t = t.left;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>)</span><br><span class="line">                t = t.right;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> t.setValue(value);</span><br><span class="line">        &#125; <span class="keyword">while</span> (t != <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    Entry&lt;K,V&gt; e = <span class="keyword">new</span> Entry&lt;&gt;(key, value, parent);</span><br><span class="line">    <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>)</span><br><span class="line">        parent.left = e;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        parent.right = e;</span><br><span class="line">    fixAfterInsertion(e);</span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="利用HashSet去重"><a href="#利用HashSet去重" class="headerlink" title="利用HashSet去重"></a>利用HashSet去重</h4><p><strong>注意注意</strong> ：这里的addAll方法并不是用了HashSet的特性，HashSet并没有实现这个方法，所以写错了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove1</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">    Set&lt;Integer&gt; newParams = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    newParams.addAll(params);</span><br><span class="line">    System.out.println(newParams);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//还是看下他的add方法，这里的map是HashMap，HashSet底层是利用的HashMap的key的不可重复特性</span></span><br><span class="line"><span class="comment">//value值是一个固定的Object对象</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="利用jdk1-8的新特性，stream流"><a href="#利用jdk1-8的新特性，stream流" class="headerlink" title="利用jdk1.8的新特性，stream流"></a>利用jdk1.8的新特性，stream流</h4><p><em>待整理</em>……</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">streamDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; integerList = params.stream().distinct().collect(Collectors.toList());</span><br><span class="line">    System.out.println(integerList);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="完整代码如下"><a href="#完整代码如下" class="headerlink" title="完整代码如下"></a>完整代码如下</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> collection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDumplicateRemove</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用contains方法，底层调用的是equals方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">listDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; newParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; params.size(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!newParams.contains(params.get(i)))&#123;</span><br><span class="line">                newParams.add(params.get(i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * treeset</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//直接加进去</span></span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * hashset去重</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDumplicateRemove1</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        Set&lt;Integer&gt; newParams = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        newParams.addAll(params);</span><br><span class="line">        System.out.println(newParams);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 利用stream流去重，jdk版本不低于1.8</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">streamDumplicateRemove</span><span class="params">(List&lt;Integer&gt; params)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; integerList = params.stream().distinct().collect(Collectors.toList());</span><br><span class="line">        System.out.println(integerList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; testParams = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">1</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">2</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        testParams.add(<span class="number">3</span>);</span><br><span class="line">        listDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove(testParams);</span><br><span class="line">        setDumplicateRemove1(testParams);</span><br><span class="line">        streamDumplicateRemove(testParams);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>集合</tag>
       </tags>
   </entry>
   <entry>
@@ -394,26 +403,13 @@
       </categories>
   </entry>
   <entry>
-    <title>typora上传图片</title>
-    <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
-    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
-<span id="more"></span>
-
-<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
-<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
-<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
-<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
-<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
-]]></content>
+    <title>可视化的监控 spring-boot 程序的运行状态</title>
+    <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
+    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
+<span id="more"></span>]]></content>
       <categories>
-        <category>typora</category>
+        <category>SpringBoot</category>
       </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
   </entry>
   <entry>
     <title>监控 spring-boot 的启动和运行状态</title>
@@ -441,15 +437,6 @@
 </li>
 </ul>
 ]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>可视化的监控 spring-boot 程序的运行状态</title>
-    <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
-    <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
-<span id="more"></span>]]></content>
       <categories>
         <category>SpringBoot</category>
       </categories>
@@ -521,6 +508,28 @@
       </categories>
       <tags>
         <tag>反射</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>typora上传图片</title>
+    <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
+    <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
+<span id="more"></span>
+
+<h4 id="gitee创建仓库"><a href="#gitee创建仓库" class="headerlink" title="gitee创建仓库"></a>gitee创建仓库</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163420.png" alt="image-20211204163418705"></p>
+<h4 id="设置私人令牌"><a href="#设置私人令牌" class="headerlink" title="设置私人令牌"></a>设置私人令牌</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163702.png" alt="image-20211204163700624"></p>
+<h4 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h4><p><a href="https://nodejs.org/en/download/">下载地址</a>，选择Windows版本</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204163847.png" alt="image-20211204163846147"></p>
+<h4 id="cmd进入插件位置，执行以下命令"><a href="#cmd进入插件位置，执行以下命令" class="headerlink" title="cmd进入插件位置，执行以下命令"></a>cmd进入插件位置，执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.\picgo.exe install smms-user</span><br><span class="line">.\picgo.exe install gitee-uploader</span><br><span class="line">.\picgo.exe install github-plus</span><br><span class="line">.\picgo.exe install rename-file</span><br><span class="line">.\picgo.exe install super-prefix</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164124.png" alt="image-20211204164122863"></p>
+<h4 id="验证图片上传"><a href="#验证图片上传" class="headerlink" title="验证图片上传"></a>验证图片上传</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211204164403.png" alt="image-20211204164401510"></p>
+]]></content>
+      <categories>
+        <category>typora</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
       </tags>
   </entry>
 </search>
