@@ -99,10 +99,66 @@
       </tags>
   </entry>
   <entry>
+    <title>SpringMVC流程源码分析</title>
+    <url>/SpringMVC%E6%B5%81%E7%A8%8B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-05927be942ce/</url>
+    <content><![CDATA[<p>项目启动扫描url，并存储，用户发起请求，前端控制器根据url分发请求</p>
+<span id="more"></span>
+
+<h3 id="建立所有url和controller的对应关系"><a href="#建立所有url和controller的对应关系" class="headerlink" title="建立所有url和controller的对应关系"></a>建立所有url和controller的对应关系</h3><blockquote>
+<p>SpringMVC的容器初始化的时候，会建立所有url和controller的对应关系</p>
+</blockquote>
+<p><strong>ApplicationObjectSupport</strong>里面有一个方法：setApplicationContext(ApplicationContext context)</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext context)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (context == <span class="keyword">null</span> &amp;&amp; !isContextRequired()) &#123;</span><br><span class="line">			<span class="comment">// Reset internal context state.</span></span><br><span class="line">			<span class="keyword">this</span>.applicationContext = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">this</span>.messageSourceAccessor = <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.applicationContext == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="comment">// Initialize with passed-in context.</span></span><br><span class="line">			<span class="keyword">if</span> (!requiredContextClass().isInstance(context)) &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(</span><br><span class="line">						<span class="string">&quot;Invalid application context: needs to be of type [&quot;</span> + requiredContextClass().getName() + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">this</span>.applicationContext = context;</span><br><span class="line">			<span class="keyword">this</span>.messageSourceAccessor = <span class="keyword">new</span> MessageSourceAccessor(context);</span><br><span class="line">			initApplicationContext(context);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// Ignore reinitialization if same context passed in.</span></span><br><span class="line">			<span class="keyword">if</span> (<span class="keyword">this</span>.applicationContext != context) &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(</span><br><span class="line">						<span class="string">&quot;Cannot reinitialize with different application context: current one is [&quot;</span> +</span><br><span class="line">						<span class="keyword">this</span>.applicationContext + <span class="string">&quot;], passed-in one is [&quot;</span> + context + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>ApplicationContext 为应用上下文内容，继承BeanFactory，ApplicationContext 的常用子类有三个</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ClassPathXmlApplicationContext</span><br><span class="line">FileSystemXmlApplicationContext</span><br><span class="line">XmlWebApplicationContext</span><br></pre></td></tr></table></figure></li>
+<li><p>注意initApplicationContext(context)方法</p>
+<p> 这个方法是由子类AbstractDetectingUrlHandlerMapping实现的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initApplicationContext</span><span class="params">()</span> <span class="keyword">throws</span> ApplicationContextException </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.initApplicationContext();</span><br><span class="line">    detectHandlers();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>detectHandlers()方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">detectHandlers</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;Looking for URL mappings in application context: &quot;</span> + getApplicationContext());</span><br><span class="line">    &#125;</span><br><span class="line">    String[] beanNames = (<span class="keyword">this</span>.detectHandlersInAncestorContexts ?</span><br><span class="line">            BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), Object.class) :</span><br><span class="line">            getApplicationContext().getBeanNamesForType(Object.class));</span><br><span class="line">	<span class="comment">//取任何我们可以确定URL的bean名称</span></span><br><span class="line">    <span class="comment">// Take any bean name that we can determine URLs for.</span></span><br><span class="line">    <span class="keyword">for</span> (String beanName : beanNames) &#123;</span><br><span class="line">        String[] urls = determineUrlsForHandler(beanName);</span><br><span class="line">        <span class="keyword">if</span> (!ObjectUtils.isEmpty(urls)) &#123;</span><br><span class="line">            <span class="comment">//找到的URL路径：让我们把它看作一个处理程序，保存url和beanName的对应关系</span></span><br><span class="line">            <span class="comment">// URL paths found: Let&#x27;s consider it a handler.</span></span><br><span class="line">            registerHandler(urls, beanName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">                logger.debug(<span class="string">&quot;Rejected bean name &#x27;&quot;</span> + beanName + <span class="string">&quot;&#x27;: no URL paths identified&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="请求处理流程"><a href="#请求处理流程" class="headerlink" title="请求处理流程"></a>请求处理流程</h3><blockquote>
+<p>首先我们知道用户请求都要进过DispatcherServlet，我们就从这里开始分析</p>
+</blockquote>
+<p><strong>DispatcherServlet的继承情况如图</strong></p>
+<img src="SpringMVC流程源码分析\DispatcherServlet.png" style="zoom:100%;" />
+
+<p>从图中可知，DispatcherServlet最终是继承了HttpServlet，实现了Servlet接口，说明这是一个servlet，那么必然有一个service方法，在它的父类FrameworkServlet里面可以找到，如下</p>
+<p><strong>service方法</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Override the parent class implementation in order to intercept PATCH</span></span><br><span class="line"><span class="comment"> * requests.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    String method = request.getMethod();</span><br><span class="line">    <span class="keyword">if</span> (method.equalsIgnoreCase(RequestMethod.PATCH.name())) &#123;</span><br><span class="line">        processRequest(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.service(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里也是进行的方法的重写，判断是否是PATCH请求</p>
+<ul>
+<li>equalsIgnoreCase：判断是否相等，不区分大小写</li>
+<li>如果是，则执行：processRequest(request, response);</li>
+<li>否，则执行父类：super.service(request, response);</li>
+</ul>
+<p><strong>注意：</strong>这里不仅重写了service方法，还重写了dopost等方法，所有的请求最终都到达<strong>processRequest</strong>方法</p>
+<p><img src="D:\GitLocalLibrary\hexo\source_posts\SpringMVC流程源码分析\service等方法.png"></p>
+<p><strong>processRequest方法</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">processRequest</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//调用模板方法，进入DispatcherServlet</span></span><br><span class="line">        doService(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里才发现，最后进入了常说的DispatcherServlet的doService方法，进行请求的转发</p>
+<p><strong>doService</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doService</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ......</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//这里处理核心逻辑</span></span><br><span class="line">        doDispatch(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>doDispatch方法</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doDispatch</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    HttpServletRequest processedRequest = request;</span><br><span class="line">    HandlerExecutionChain mappedHandler = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">boolean</span> multipartRequestParsed = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ModelAndView mv = <span class="keyword">null</span>;</span><br><span class="line">        Exception dispatchException = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//检查是否是文件上传请求</span></span><br><span class="line">            processedRequest = checkMultipart(request);</span><br><span class="line">            multipartRequestParsed = processedRequest != request;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Determine handler for the current request.</span></span><br><span class="line">            <span class="comment">//取得处理当前请求的controller,这里也称为hanlder,处理器,这里并不是直接返回controller,而是返回的HandlerExecutionChain请求处理器链对象,该对象封装了handler和interceptors.</span></span><br><span class="line">            mappedHandler = getHandler(processedRequest);</span><br><span class="line">            <span class="comment">//handler为空，返回404</span></span><br><span class="line">            <span class="keyword">if</span> (mappedHandler == <span class="keyword">null</span> || mappedHandler.getHandler() == <span class="keyword">null</span>) &#123;</span><br><span class="line">                noHandlerFound(processedRequest, response);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Determine handler adapter for the current request.</span></span><br><span class="line">            <span class="comment">//获取处理request的处理器适配器handler adapter </span></span><br><span class="line">            HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Process last-modified header, if supported by the handler.</span></span><br><span class="line">            <span class="comment">//处理 last-modified 请求头</span></span><br><span class="line">            String method = request.getMethod();</span><br><span class="line">            <span class="keyword">boolean</span> isGet = <span class="string">&quot;GET&quot;</span>.equals(method);</span><br><span class="line">            <span class="keyword">if</span> (isGet || <span class="string">&quot;HEAD&quot;</span>.equals(method)) &#123;</span><br><span class="line">                <span class="keyword">long</span> lastModified = ha.getLastModified(request, mappedHandler.getHandler());</span><br><span class="line">                <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">                    String requestUri = urlPathHelper.getRequestUri(request);</span><br><span class="line">                    logger.debug(<span class="string">&quot;Last-Modified value for [&quot;</span> + requestUri + <span class="string">&quot;] is: &quot;</span> + lastModified);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">new</span> ServletWebRequest(request, response).checkNotModified(lastModified) &amp;&amp; isGet) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//拦截器的预处理方法</span></span><br><span class="line">            <span class="keyword">if</span> (!mappedHandler.applyPreHandle(processedRequest, response)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// Actually invoke the handler.</span></span><br><span class="line">                <span class="comment">//实际的处理器处理请求,返回结果视图对象</span></span><br><span class="line">                mv = ha.handle(processedRequest, response, mappedHandler.getHandler());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//结果视图对象的处理</span></span><br><span class="line">            applyDefaultViewName(request, mv);</span><br><span class="line">            <span class="comment">//拦截器的后处理方法</span></span><br><span class="line">            mappedHandler.applyPostHandle(processedRequest, response, mv);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            dispatchException = ex;</span><br><span class="line">        &#125;</span><br><span class="line">        processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">        triggerAfterCompletion(processedRequest, response, mappedHandler, ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Error err) &#123;</span><br><span class="line">        triggerAfterCompletionWithError(processedRequest, response, mappedHandler, err);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</span><br><span class="line">            <span class="comment">// Instead of postHandle and afterCompletion</span></span><br><span class="line">            <span class="comment">//请求成功响应之后的方法</span></span><br><span class="line">            mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Clean up any resources used by a multipart request.</span></span><br><span class="line">        <span class="keyword">if</span> (multipartRequestParsed) &#123;</span><br><span class="line">            cleanupMultipart(processedRequest);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参考：</p>
+<p><a href="https://www.cnblogs.com/heavenyes/p/3905844.html#a1">https://www.cnblogs.com/heavenyes/p/3905844.html#a1</a></p>
+<p><a href="https://blog.csdn.net/zhangdong2012/article/details/60322922">https://blog.csdn.net/zhangdong2012/article/details/60322922</a></p>
+]]></content>
+      <categories>
+        <category>SpringMVC</category>
+      </categories>
+  </entry>
+  <entry>
     <title>SpringBoot核心功能-web开发</title>
     <url>/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/</url>
-    <content><![CDATA[<hr>
-<p>今天整理一下SpringBoot的web开发，简单功能分析、请求参数处理</p>
+    <content><![CDATA[<p>今天整理一下SpringBoot的web开发，简单功能分析、请求参数处理</p>
 <span id="more"></span>
 
 <h3 id="简单功能分析"><a href="#简单功能分析" class="headerlink" title="简单功能分析"></a>简单功能分析</h3><h4 id="静态资源访问"><a href="#静态资源访问" class="headerlink" title="静态资源访问"></a>静态资源访问</h4><h4 id="静态资源目录"><a href="#静态资源目录" class="headerlink" title="静态资源目录"></a>静态资源目录</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.resourceProperties.isAddMappings()) &#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;Default resource handling disabled&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Duration cachePeriod = <span class="keyword">this</span>.resourceProperties.getCache().getPeriod();</span><br><span class="line">        CacheControl cacheControl = <span class="keyword">this</span>.resourceProperties.getCache().getCachecontrol().toHttpCacheControl();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(<span class="string">&quot;/webjars/**&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;/webjars/**&quot;</span>&#125;).addResourceLocations(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;classpath:/META-INF/resources/webjars/&quot;</span>&#125;).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl).setUseLastModified(<span class="keyword">this</span>.resourceProperties.getCache().isUseLastModified()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String staticPathPattern = <span class="keyword">this</span>.mvcProperties.getStaticPathPattern();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(staticPathPattern)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(</span><br><span class="line">                <span class="keyword">new</span> String[]&#123;staticPathPattern&#125;)                                    .addResourceLocations(WebMvcAutoConfiguration.getResourceLocations(<span class="keyword">this</span>.resourceProperties.getStaticLocations())).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl).setUseLastModified(<span class="keyword">this</span>.resourceProperties.getCache().isUseLastModified()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -195,63 +251,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SpringMVC流程源码分析</title>
-    <url>/SpringMVC%E6%B5%81%E7%A8%8B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-05927be942ce/</url>
-    <content><![CDATA[<p>项目启动扫描url，并存储，用户发起请求，前端控制器根据url分发请求</p>
-<span id="more"></span>
-
-<h3 id="建立所有url和controller的对应关系"><a href="#建立所有url和controller的对应关系" class="headerlink" title="建立所有url和controller的对应关系"></a>建立所有url和controller的对应关系</h3><blockquote>
-<p>SpringMVC的容器初始化的时候，会建立所有url和controller的对应关系</p>
-</blockquote>
-<p><strong>ApplicationObjectSupport</strong>里面有一个方法：setApplicationContext(ApplicationContext context)</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext context)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (context == <span class="keyword">null</span> &amp;&amp; !isContextRequired()) &#123;</span><br><span class="line">			<span class="comment">// Reset internal context state.</span></span><br><span class="line">			<span class="keyword">this</span>.applicationContext = <span class="keyword">null</span>;</span><br><span class="line">			<span class="keyword">this</span>.messageSourceAccessor = <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.applicationContext == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="comment">// Initialize with passed-in context.</span></span><br><span class="line">			<span class="keyword">if</span> (!requiredContextClass().isInstance(context)) &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(</span><br><span class="line">						<span class="string">&quot;Invalid application context: needs to be of type [&quot;</span> + requiredContextClass().getName() + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">this</span>.applicationContext = context;</span><br><span class="line">			<span class="keyword">this</span>.messageSourceAccessor = <span class="keyword">new</span> MessageSourceAccessor(context);</span><br><span class="line">			initApplicationContext(context);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// Ignore reinitialization if same context passed in.</span></span><br><span class="line">			<span class="keyword">if</span> (<span class="keyword">this</span>.applicationContext != context) &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(</span><br><span class="line">						<span class="string">&quot;Cannot reinitialize with different application context: current one is [&quot;</span> +</span><br><span class="line">						<span class="keyword">this</span>.applicationContext + <span class="string">&quot;], passed-in one is [&quot;</span> + context + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p>ApplicationContext 为应用上下文内容，继承BeanFactory，ApplicationContext 的常用子类有三个</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ClassPathXmlApplicationContext</span><br><span class="line">FileSystemXmlApplicationContext</span><br><span class="line">XmlWebApplicationContext</span><br></pre></td></tr></table></figure></li>
-<li><p>注意initApplicationContext(context)方法</p>
-<p> 这个方法是由子类AbstractDetectingUrlHandlerMapping实现的</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initApplicationContext</span><span class="params">()</span> <span class="keyword">throws</span> ApplicationContextException </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.initApplicationContext();</span><br><span class="line">    detectHandlers();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>detectHandlers()方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">detectHandlers</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;Looking for URL mappings in application context: &quot;</span> + getApplicationContext());</span><br><span class="line">    &#125;</span><br><span class="line">    String[] beanNames = (<span class="keyword">this</span>.detectHandlersInAncestorContexts ?</span><br><span class="line">            BeanFactoryUtils.beanNamesForTypeIncludingAncestors(getApplicationContext(), Object.class) :</span><br><span class="line">            getApplicationContext().getBeanNamesForType(Object.class));</span><br><span class="line">	<span class="comment">//取任何我们可以确定URL的bean名称</span></span><br><span class="line">    <span class="comment">// Take any bean name that we can determine URLs for.</span></span><br><span class="line">    <span class="keyword">for</span> (String beanName : beanNames) &#123;</span><br><span class="line">        String[] urls = determineUrlsForHandler(beanName);</span><br><span class="line">        <span class="keyword">if</span> (!ObjectUtils.isEmpty(urls)) &#123;</span><br><span class="line">            <span class="comment">//找到的URL路径：让我们把它看作一个处理程序，保存url和beanName的对应关系</span></span><br><span class="line">            <span class="comment">// URL paths found: Let&#x27;s consider it a handler.</span></span><br><span class="line">            registerHandler(urls, beanName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">                logger.debug(<span class="string">&quot;Rejected bean name &#x27;&quot;</span> + beanName + <span class="string">&quot;&#x27;: no URL paths identified&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="请求处理流程"><a href="#请求处理流程" class="headerlink" title="请求处理流程"></a>请求处理流程</h3><blockquote>
-<p>首先我们知道用户请求都要进过DispatcherServlet，我们就从这里开始分析</p>
-</blockquote>
-<p><strong>DispatcherServlet的继承情况如图</strong></p>
-<img src="SpringMVC流程源码分析\DispatcherServlet.png" style="zoom:100%;" />
-
-<p>从图中可知，DispatcherServlet最终是继承了HttpServlet，实现了Servlet接口，说明这是一个servlet，那么必然有一个service方法，在它的父类FrameworkServlet里面可以找到，如下</p>
-<p><strong>service方法</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Override the parent class implementation in order to intercept PATCH</span></span><br><span class="line"><span class="comment"> * requests.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    String method = request.getMethod();</span><br><span class="line">    <span class="keyword">if</span> (method.equalsIgnoreCase(RequestMethod.PATCH.name())) &#123;</span><br><span class="line">        processRequest(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.service(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里也是进行的方法的重写，判断是否是PATCH请求</p>
-<ul>
-<li>equalsIgnoreCase：判断是否相等，不区分大小写</li>
-<li>如果是，则执行：processRequest(request, response);</li>
-<li>否，则执行父类：super.service(request, response);</li>
-</ul>
-<p><strong>注意：</strong>这里不仅重写了service方法，还重写了dopost等方法，所有的请求最终都到达<strong>processRequest</strong>方法</p>
-<p><img src="D:\GitLocalLibrary\hexo\source_posts\SpringMVC流程源码分析\service等方法.png"></p>
-<p><strong>processRequest方法</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">processRequest</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//调用模板方法，进入DispatcherServlet</span></span><br><span class="line">        doService(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里才发现，最后进入了常说的DispatcherServlet的doService方法，进行请求的转发</p>
-<p><strong>doService</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doService</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ......</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//这里处理核心逻辑</span></span><br><span class="line">        doDispatch(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>doDispatch方法</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doDispatch</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    HttpServletRequest processedRequest = request;</span><br><span class="line">    HandlerExecutionChain mappedHandler = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">boolean</span> multipartRequestParsed = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ModelAndView mv = <span class="keyword">null</span>;</span><br><span class="line">        Exception dispatchException = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//检查是否是文件上传请求</span></span><br><span class="line">            processedRequest = checkMultipart(request);</span><br><span class="line">            multipartRequestParsed = processedRequest != request;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Determine handler for the current request.</span></span><br><span class="line">            <span class="comment">//取得处理当前请求的controller,这里也称为hanlder,处理器,这里并不是直接返回controller,而是返回的HandlerExecutionChain请求处理器链对象,该对象封装了handler和interceptors.</span></span><br><span class="line">            mappedHandler = getHandler(processedRequest);</span><br><span class="line">            <span class="comment">//handler为空，返回404</span></span><br><span class="line">            <span class="keyword">if</span> (mappedHandler == <span class="keyword">null</span> || mappedHandler.getHandler() == <span class="keyword">null</span>) &#123;</span><br><span class="line">                noHandlerFound(processedRequest, response);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Determine handler adapter for the current request.</span></span><br><span class="line">            <span class="comment">//获取处理request的处理器适配器handler adapter </span></span><br><span class="line">            HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Process last-modified header, if supported by the handler.</span></span><br><span class="line">            <span class="comment">//处理 last-modified 请求头</span></span><br><span class="line">            String method = request.getMethod();</span><br><span class="line">            <span class="keyword">boolean</span> isGet = <span class="string">&quot;GET&quot;</span>.equals(method);</span><br><span class="line">            <span class="keyword">if</span> (isGet || <span class="string">&quot;HEAD&quot;</span>.equals(method)) &#123;</span><br><span class="line">                <span class="keyword">long</span> lastModified = ha.getLastModified(request, mappedHandler.getHandler());</span><br><span class="line">                <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">                    String requestUri = urlPathHelper.getRequestUri(request);</span><br><span class="line">                    logger.debug(<span class="string">&quot;Last-Modified value for [&quot;</span> + requestUri + <span class="string">&quot;] is: &quot;</span> + lastModified);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">new</span> ServletWebRequest(request, response).checkNotModified(lastModified) &amp;&amp; isGet) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//拦截器的预处理方法</span></span><br><span class="line">            <span class="keyword">if</span> (!mappedHandler.applyPreHandle(processedRequest, response)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// Actually invoke the handler.</span></span><br><span class="line">                <span class="comment">//实际的处理器处理请求,返回结果视图对象</span></span><br><span class="line">                mv = ha.handle(processedRequest, response, mappedHandler.getHandler());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//结果视图对象的处理</span></span><br><span class="line">            applyDefaultViewName(request, mv);</span><br><span class="line">            <span class="comment">//拦截器的后处理方法</span></span><br><span class="line">            mappedHandler.applyPostHandle(processedRequest, response, mv);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            dispatchException = ex;</span><br><span class="line">        &#125;</span><br><span class="line">        processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">        triggerAfterCompletion(processedRequest, response, mappedHandler, ex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Error err) &#123;</span><br><span class="line">        triggerAfterCompletionWithError(processedRequest, response, mappedHandler, err);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (asyncManager.isConcurrentHandlingStarted()) &#123;</span><br><span class="line">            <span class="comment">// Instead of postHandle and afterCompletion</span></span><br><span class="line">            <span class="comment">//请求成功响应之后的方法</span></span><br><span class="line">            mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Clean up any resources used by a multipart request.</span></span><br><span class="line">        <span class="keyword">if</span> (multipartRequestParsed) &#123;</span><br><span class="line">            cleanupMultipart(processedRequest);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>参考：</p>
-<p><a href="https://www.cnblogs.com/heavenyes/p/3905844.html#a1">https://www.cnblogs.com/heavenyes/p/3905844.html#a1</a></p>
-<p><a href="https://blog.csdn.net/zhangdong2012/article/details/60322922">https://blog.csdn.net/zhangdong2012/article/details/60322922</a></p>
-]]></content>
-      <categories>
-        <category>SpringMVC</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Sublime配置java运行环境</title>
     <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
     <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
@@ -303,26 +302,6 @@
       </tags>
   </entry>
   <entry>
-    <title>linux命令记录</title>
-    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
-    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
-<span id="more"></span>
-
-<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
-<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
-</li>
-<li><p>安装vim命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>hexo发布博客常用命令</title>
     <url>/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE-e009715b4132/</url>
     <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
@@ -360,6 +339,26 @@
       <tags>
         <tag>工具</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>linux命令记录</title>
+    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
+    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
+<span id="more"></span>
+
+<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
+<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
+</li>
+<li><p>安装vim命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
   </entry>
   <entry>
     <title>java动态代理</title>
@@ -438,6 +437,41 @@
       </tags>
   </entry>
   <entry>
+    <title>putty导出日志乱字符</title>
+    <url>/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6-0baf9af30b24/</url>
+    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
+<span id="more"></span>
+
+<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
+<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
+]]></content>
+      <categories>
+        <category>putty</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title> springboot读取配置文件</title>
+    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
+    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
+<span id="more"></span>
+
+<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
     <title>list常见去重方式</title>
     <url>/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/</url>
     <content><![CDATA[<p>简单写一下常见的list去重方式，并理解实现原理</p>
@@ -464,23 +498,6 @@
       </tags>
   </entry>
   <entry>
-    <title>putty导出日志乱字符</title>
-    <url>/putty%E5%AF%BC%E5%87%BA%E6%97%A5%E5%BF%97%E4%B9%B1%E5%AD%97%E7%AC%A6-0baf9af30b24/</url>
-    <content><![CDATA[<p>putty乱码问题，一种是控制台乱码，一种是导出日志乱码</p>
-<span id="more"></span>
-
-<h4 id="1、控制台乱码，按照如下配置"><a href="#1、控制台乱码，按照如下配置" class="headerlink" title="1、控制台乱码，按照如下配置"></a>1、控制台乱码，按照如下配置</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085830.jpg"></p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085904.jpg"></p>
-<h4 id="2、putty-log乱码"><a href="#2、putty-log乱码" class="headerlink" title="2、putty.log乱码"></a>2、putty.log乱码</h4><p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211216085927.jpg"></p>
-]]></content>
-      <categories>
-        <category>putty</category>
-      </categories>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>typora上传图片</title>
     <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
     <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
@@ -503,22 +520,23 @@
       </tags>
   </entry>
   <entry>
-    <title> springboot读取配置文件</title>
-    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
-    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
-<span id="more"></span>
-
-<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
+    <title>测试文件加密</title>
+    <url>/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，这个密码看着不太对，请再试试。" data-whm="抱歉，这个文章不能被纠正，不过您还是能看看解密后的内容。">
+  <script id="hbeData" type="hbeData" data-hmacdigest="eb8a803bb67cb2a094eb9ad7f8de51f644d4db944b9b7ec8a152727f6fd3c0fb">4f9d6c703ece105168ceb7dec42064620bb84448cee931f825eaa3c5ae7c8bbf6f482576ebd08f86f86b45723917cd1f48b5056848233e462ade634c2fae0cc16e6cffcdb36ec69d6b347c06d0a03a5972711b1b815b20e52bb9b4eacce07fae</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好，这里需要密码。</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>life</tag>
+      </tags>
   </entry>
   <entry>
     <title>可视化的监控 spring-boot 程序的运行状态</title>
@@ -607,25 +625,6 @@
       </categories>
       <tags>
         <tag>反射</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>测试文件加密</title>
-    <url>/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，这个密码看着不太对，请再试试。" data-whm="抱歉，这个文章不能被纠正，不过您还是能看看解密后的内容。">
-  <script id="hbeData" type="hbeData" data-hmacdigest="eb8a803bb67cb2a094eb9ad7f8de51f644d4db944b9b7ec8a152727f6fd3c0fb">4f9d6c703ece105168ceb7dec42064620bb84448cee931f825eaa3c5ae7c8bbf6f482576ebd08f86f86b45723917cd1f48b5056848233e462ade634c2fae0cc16e6cffcdb36ec69d6b347c06d0a03a5972711b1b815b20e52bb9b4eacce07fae</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好，这里需要密码。</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>life</tag>
       </tags>
   </entry>
 </search>
