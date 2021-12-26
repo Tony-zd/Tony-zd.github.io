@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用">
+  <meta name="description" content="今天整理一下SpringBoot的web开发，按照课程学习有10个部分，今天整理一下简单功能分析、请求参数处理 简单功能分析静态资源访问静态资源目录123456789101112131415161718public void addResourceHandlers(ResourceHandlerRegistry registry) &amp;#123;    if (!this.resourceProp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="可视化的监控 spring-boot 程序的运行状态">
-<meta property="og:url" content="http://example.com/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/index.html">
+<meta property="og:title" content="SpringBoot核心功能-web开发">
+<meta property="og:url" content="http://example.com/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/index.html">
 <meta property="og:site_name" content="打怪中">
-<meta property="og:description" content="spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用">
+<meta property="og:description" content="今天整理一下SpringBoot的web开发，按照课程学习有10个部分，今天整理一下简单功能分析、请求参数处理 简单功能分析静态资源访问静态资源目录123456789101112131415161718public void addResourceHandlers(ResourceHandlerRegistry registry) &amp;#123;    if (!this.resourceProp">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-10T22:34:50.000Z">
-<meta property="article:modified_time" content="2021-03-10T22:35:28.000Z">
+<meta property="article:published_time" content="2021-12-21T23:13:51.000Z">
+<meta property="article:modified_time" content="2021-12-21T23:18:29.533Z">
 <meta property="article:author" content="sunt">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/">
+<link rel="canonical" href="http://example.com/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>可视化的监控 spring-boot 程序的运行状态 | 打怪中</title>
+  <title>SpringBoot核心功能-web开发 | 打怪中</title>
   
 
 
@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/logo1.jpg">
@@ -203,7 +203,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          可视化的监控 spring-boot 程序的运行状态
+          SpringBoot核心功能-web开发
         </h1>
 
         <div class="post-meta">
@@ -214,16 +214,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-03-11 06:34:50 / 修改时间：06:35:28" itemprop="dateCreated datePublished" datetime="2021-03-11T06:34:50+08:00">2021-03-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-                </span>
+              <time title="创建时间：2021-12-22 07:13:51 / 修改时间：07:18:29" itemprop="dateCreated datePublished" datetime="2021-12-22T07:13:51+08:00">2021-12-22</time>
             </span>
 
           
@@ -244,8 +235,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
-<span id="more"></span>
+        <hr>
+<p>今天整理一下SpringBoot的web开发，按照课程学习有10个部分，今天整理一下简单功能分析、请求参数处理</p>
+<h3 id="简单功能分析"><a href="#简单功能分析" class="headerlink" title="简单功能分析"></a>简单功能分析</h3><h4 id="静态资源访问"><a href="#静态资源访问" class="headerlink" title="静态资源访问"></a>静态资源访问</h4><h4 id="静态资源目录"><a href="#静态资源目录" class="headerlink" title="静态资源目录"></a>静态资源目录</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.resourceProperties.isAddMappings()) &#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;Default resource handling disabled&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Duration cachePeriod = <span class="keyword">this</span>.resourceProperties.getCache().getPeriod();</span><br><span class="line">        CacheControl cacheControl = <span class="keyword">this</span>.resourceProperties.getCache().getCachecontrol().toHttpCacheControl();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(<span class="string">&quot;/webjars/**&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;/webjars/**&quot;</span>&#125;).addResourceLocations(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;classpath:/META-INF/resources/webjars/&quot;</span>&#125;).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl).setUseLastModified(<span class="keyword">this</span>.resourceProperties.getCache().isUseLastModified()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String staticPathPattern = <span class="keyword">this</span>.mvcProperties.getStaticPathPattern();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(staticPathPattern)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(</span><br><span class="line">                <span class="keyword">new</span> String[]&#123;staticPathPattern&#125;)                                    .addResourceLocations(WebMvcAutoConfiguration.getResourceLocations(<span class="keyword">this</span>.resourceProperties.getStaticLocations())).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl).setUseLastModified(<span class="keyword">this</span>.resourceProperties.getCache().isUseLastModified()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只要静态资源放在类路径下：/static、/public、/resources、/META-INF/resources，就可以这样访问：当前项目根目录/+静态资源名</p>
+<p><strong>原理</strong>：SpringBoot静态映射是直接查找这个路径：静态映射/**，请求进来先去找Controller看能不能处理，不能处理的请求都转到静态资源处理器。如果静态资源也找不到就404</p>
+<h4 id="静态资源访问前缀"><a href="#静态资源访问前缀" class="headerlink" title="静态资源访问前缀"></a>静态资源访问前缀</h4><p>默认是没有前缀的，可以在配置文件中添加配置项，修改前缀，如下</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">mvc:</span></span><br><span class="line">    <span class="attr">static-path-pattern:</span> <span class="string">/res/**</span></span><br></pre></td></tr></table></figure>
+
+<p>查找路径：当前项目根路径+static-path-pattern+静态资源名 = 静态资源文件夹下面找</p>
+<h4 id="欢迎页访问"><a href="#欢迎页访问" class="headerlink" title="欢迎页访问"></a>欢迎页访问</h4><ul>
+<li>静态资源路径下： index.html<ul>
+<li>可以配置静态资源路径</li>
+<li>但是不可以配置静态资源的访问前缀，否则会导致index.html不能访问</li>
+</ul>
+</li>
+<li>controller能处理/index</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="comment">#  mvc:</span></span><br><span class="line"><span class="comment">#    static-path-pattern: /res/**</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">static-locations:</span> [<span class="string">classpath:/haha/</span>]</span><br></pre></td></tr></table></figure>
+
+<h4 id="自定义Facicon"><a href="#自定义Facicon" class="headerlink" title="自定义Facicon"></a>自定义Facicon</h4><p>自定义静态资源访问前缀，会导致Facicon失效</p>
+<h3 id="请求参数处理"><a href="#请求参数处理" class="headerlink" title="请求参数处理"></a>请求参数处理</h3><h4 id="请求映射"><a href="#请求映射" class="headerlink" title="请求映射"></a>请求映射</h4><p>springboot在controller中使用注解</p>
+<ul>
+<li><p>@xxxMapping表示是什么类型的请求：@GetMapping ==@RequestMapping(xxxxx.GET)</p>
+</li>
+<li><p>支持rest风格，同一个url，通过请求方式区分是对资源进行什么操作</p>
+</li>
+</ul>
+
     </div>
 
     
@@ -260,7 +278,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://example.com/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/" title="可视化的监控 spring-boot 程序的运行状态">http://example.com/可视化的监控-spring-boot-程序的运行状态-196b11fae5fc/</a>
+    <a href="http://example.com/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/" title="SpringBoot核心功能-web开发">http://example.com/SpringBoot核心功能-web开发-d6abb6d12fa4/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -277,12 +295,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/%E7%9B%91%E6%8E%A7-spring-boot-%E7%9A%84%E5%90%AF%E5%8A%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-540e65ce225d/" rel="prev" title="监控 spring-boot 的启动和运行状态">
-      <i class="fa fa-chevron-left"></i> 监控 spring-boot 的启动和运行状态
+    <a href="/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/" rel="prev" title="list常见去重方式">
+      <i class="fa fa-chevron-left"></i> list常见去重方式
     </a></div>
       <div class="post-nav-item">
-    <a href="/SpringMVC%E6%B5%81%E7%A8%8B%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-05927be942ce/" rel="next" title="SpringMVC流程源码分析">
-      SpringMVC流程源码分析 <i class="fa fa-chevron-right"></i>
+    <a href="/SpringSecurity%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B-b6e570de3c6b/" rel="next" title="SpringSecurity认证和授权流程">
+      SpringSecurity认证和授权流程 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -342,6 +360,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">简单功能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.</span> <span class="nav-text">静态资源访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E7%9B%AE%E5%BD%95"><span class="nav-number">1.2.</span> <span class="nav-text">静态资源目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E8%AE%BF%E9%97%AE%E5%89%8D%E7%BC%80"><span class="nav-number">1.3.</span> <span class="nav-text">静态资源访问前缀</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AC%A2%E8%BF%8E%E9%A1%B5%E8%AE%BF%E9%97%AE"><span class="nav-number">1.4.</span> <span class="nav-text">欢迎页访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89Facicon"><span class="nav-number">1.5.</span> <span class="nav-text">自定义Facicon</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">请求参数处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84"><span class="nav-number">2.1.</span> <span class="nav-text">请求映射</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
