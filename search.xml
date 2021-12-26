@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hashmap源码分析</title>
-    <url>/Hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-7ab6c0ae5920/</url>
-    <content><![CDATA[<p>最近简单读了一下hashmap的源码</p>
-<span id="more"></span>
-
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;<span class="comment">//可序列化</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16，默认大小16,2的幂次方</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;<span class="comment">// 最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;<span class="comment">//加载因子，16*0.75=12，达到12时进行扩容</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;<span class="comment">//转成红黑树临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;<span class="comment">//转成链表临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;<span class="comment">//数组长度临界点、</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;<span class="comment">//node数组</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="基础节点结构"><a href="#基础节点结构" class="headerlink" title="基础节点结构"></a>基础节点结构</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;<span class="comment">//key的hash值</span></span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//初始容量小于0，则报错</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal initial capacity: &quot;</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="comment">//初始容量大于1&lt;&lt;30,则容量为1&lt;&lt;30；这里注意看下扩容时的代码，看下最大值是什么</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="comment">//加载因子校验</span></span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="tableSizeFor方法"><a href="#tableSizeFor方法" class="headerlink" title="tableSizeFor方法"></a>tableSizeFor方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//找到大于或等于 cap 的最小2的幂</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="putVar方法"><a href="#putVar方法" class="headerlink" title="putVar方法"></a>putVar方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注意括号中进行了大量的赋值操作</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="params"><span class="function">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个空的node数组，节点p，两个变量</span></span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">//进行赋值操作，n为数组长度，数组是null或者长度为0，则进行初始化</span></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="comment">//hashmap的hash算法，初始化节点给p，然后将key、value放进去</span></span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//这里的e就是要put的节点</span></span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="comment">//如果key值相同，并且hashcode相同，直接将p赋值给e</span></span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="comment">//如果p是一个二叉树，将值放入</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//当前桶是一个链表，循环链表</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="comment">//找到最后都没有找到，则将新值放入链表尾部</span></span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果找到了，则break跳出循环，后面更新value就可以</span></span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;<span class="comment">//修改p的指针，p指向p的next</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新值，并返回旧值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="comment">//判断大小有没有超过阈值，超过了需要扩容</span></span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    <span class="comment">//这个方法在LinkedHashMap中重写了，保证顺序</span></span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">p = tab[i = (n - <span class="number">1</span>) &amp; hash</span><br><span class="line">e = p.next</span><br><span class="line">p = e</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>集合</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HashMap原理</title>
     <url>/HashMap%E5%8E%9F%E7%90%86-01cf3a29ddde/</url>
     <content><![CDATA[<p>哈哈</p>
@@ -99,6 +71,34 @@
       </tags>
   </entry>
   <entry>
+    <title>Hashmap源码分析</title>
+    <url>/Hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-7ab6c0ae5920/</url>
+    <content><![CDATA[<p>最近简单读了一下hashmap的源码</p>
+<span id="more"></span>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;<span class="comment">//可序列化</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16，默认大小16,2的幂次方</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;<span class="comment">// 最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;<span class="comment">//加载因子，16*0.75=12，达到12时进行扩容</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;<span class="comment">//转成红黑树临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;<span class="comment">//转成链表临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;<span class="comment">//数组长度临界点、</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;<span class="comment">//node数组</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="基础节点结构"><a href="#基础节点结构" class="headerlink" title="基础节点结构"></a>基础节点结构</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;<span class="comment">//key的hash值</span></span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//初始容量小于0，则报错</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal initial capacity: &quot;</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="comment">//初始容量大于1&lt;&lt;30,则容量为1&lt;&lt;30；这里注意看下扩容时的代码，看下最大值是什么</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="comment">//加载因子校验</span></span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="tableSizeFor方法"><a href="#tableSizeFor方法" class="headerlink" title="tableSizeFor方法"></a>tableSizeFor方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//找到大于或等于 cap 的最小2的幂</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="putVar方法"><a href="#putVar方法" class="headerlink" title="putVar方法"></a>putVar方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注意括号中进行了大量的赋值操作</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="params"><span class="function">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个空的node数组，节点p，两个变量</span></span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">//进行赋值操作，n为数组长度，数组是null或者长度为0，则进行初始化</span></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="comment">//hashmap的hash算法，初始化节点给p，然后将key、value放进去</span></span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//这里的e就是要put的节点</span></span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="comment">//如果key值相同，并且hashcode相同，直接将p赋值给e</span></span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="comment">//如果p是一个二叉树，将值放入</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//当前桶是一个链表，循环链表</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="comment">//找到最后都没有找到，则将新值放入链表尾部</span></span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果找到了，则break跳出循环，后面更新value就可以</span></span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;<span class="comment">//修改p的指针，p指向p的next</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新值，并返回旧值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="comment">//判断大小有没有超过阈值，超过了需要扩容</span></span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    <span class="comment">//这个方法在LinkedHashMap中重写了，保证顺序</span></span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">p = tab[i = (n - <span class="number">1</span>) &amp; hash</span><br><span class="line">e = p.next</span><br><span class="line">p = e</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringBoot核心功能-web开发</title>
     <url>/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/</url>
     <content><![CDATA[<hr>
@@ -134,6 +134,61 @@
 ]]></content>
       <categories>
         <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringSecurity认证和授权流程</title>
+    <url>/SpringSecurity%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B-b6e570de3c6b/</url>
+    <content><![CDATA[<p>通过这篇文章先大致了解整个认证和授权流程，以及后续可扩展的功能点</p>
+<span id="more"></span>
+
+<blockquote>
+<p>参考：<a href="https://blog.csdn.net/u012702547/article/details/89629415">(28条消息) Spring Security 工作原理概览_江南一点雨的专栏-CSDN博客</a></p>
+</blockquote>
+<p>先看下整个流程图，这个图是参考上面文章，结合我本身项目实践中用的扩展点，进行进一步解释</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211226133814.png" alt="springsecurity的认证和授权"></p>
+<p>**SpringSecurity的使用，主要包含认证和授权两方面功能，对应的有两个管理器：认证管理器（<code>AuthenticationManager</code> ）、授权管理器（<code>AccessDecisonManager</code> ），整个流程都围绕这两方面进行，中间穿插着其他一些附属功能，如处理跨站请求伪造、处理用户的登录登出等等。下面将介绍介绍几个比较重要的Filter以及官方支持的扩展点 **</p>
+<h4 id="CsrfFilter"><a href="#CsrfFilter" class="headerlink" title="CsrfFilter"></a>CsrfFilter</h4><p>利用token处理跨站请求伪造，分析一下代码逻辑，如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doFilterInternal</span><span class="params">(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    request.setAttribute(HttpServletResponse.class.getName(), response);</span><br><span class="line">    <span class="comment">//从request中获取CsrfToken</span></span><br><span class="line">    CsrfToken csrfToken = <span class="keyword">this</span>.tokenRepository.loadToken(request);</span><br><span class="line">    <span class="comment">//判断是否为null</span></span><br><span class="line">    <span class="keyword">boolean</span> missingToken = csrfToken == <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (missingToken) &#123;</span><br><span class="line">        <span class="comment">//如果为null，则生成一个新的token，并保存到tokenRepository，用于后续请求的验证</span></span><br><span class="line">        csrfToken = <span class="keyword">this</span>.tokenRepository.generateToken(request);</span><br><span class="line">        <span class="keyword">this</span>.tokenRepository.saveToken(csrfToken, request, response);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//将csrfToken放入到请求参数中</span></span><br><span class="line">    request.setAttribute(CsrfToken.class.getName(), csrfToken);</span><br><span class="line">    request.setAttribute(csrfToken.getParameterName(), csrfToken);</span><br><span class="line">    <span class="comment">//判断是否需要csrf验证，不需要则直接进入下一个filter</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.requireCsrfProtectionMatcher.matches(request)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.logger.isTraceEnabled()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.logger.trace(<span class="string">&quot;Did not protect against CSRF since request did not match &quot;</span> + <span class="keyword">this</span>.requireCsrfProtectionMatcher);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//需要验证，从请求头获取传入的actualToken</span></span><br><span class="line">        String actualToken = request.getHeader(csrfToken.getHeaderName());</span><br><span class="line">        <span class="keyword">if</span> (actualToken == <span class="keyword">null</span>) &#123;</span><br><span class="line">            actualToken = request.getParameter(csrfToken.getParameterName());</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//判断传入的token和服务器端存储的token是否一致，不一致则报错</span></span><br><span class="line">        <span class="keyword">if</span> (!csrfToken.getToken().equals(actualToken)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.logger.debug(LogMessage.of(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;Invalid CSRF token found for &quot;</span> + UrlUtils.buildFullRequestUrl(request);</span><br><span class="line">            &#125;));</span><br><span class="line">            AccessDeniedException exception = !missingToken ? <span class="keyword">new</span> InvalidCsrfTokenException(csrfToken, actualToken) : <span class="keyword">new</span> MissingCsrfTokenException(actualToken);</span><br><span class="line">            <span class="keyword">this</span>.accessDeniedHandler.handle(request, response, (AccessDeniedException)exception);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            filterChain.doFilter(request, response);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>待分析：</p>
+<ul>
+<li>tokenRepository有三个实现类</li>
+<li>如何判断是否需要验证csrf：requireCsrfProtectionMatcher</li>
+</ul>
+<h4 id="UsernamePasswordAuthenticationFilter"><a href="#UsernamePasswordAuthenticationFilter" class="headerlink" title="UsernamePasswordAuthenticationFilter"></a>UsernamePasswordAuthenticationFilter</h4><p>用于处理基于表单的登录请求，从表单中获取用户名和密码，也就是普通的登录页面，输入用户名密码进行登录。代码分析如下：</p>
+<ul>
+<li>继承父类<code>AbstractAuthenticationProcessingFilter</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(HttpServletRequest request, HttpServletResponse response, FilterChain chain)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    <span class="comment">//不需要认证，直接通过</span></span><br><span class="line">    <span class="keyword">if</span> (!requiresAuthentication(request, response)) &#123;</span><br><span class="line">        chain.doFilter(request, response);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//这里attemptAuthentication（尝试认证）是一个抽象方法，具体实现由子类实现，见下方</span></span><br><span class="line">        Authentication authenticationResult = attemptAuthentication(request, response);</span><br><span class="line">        <span class="keyword">if</span> (authenticationResult == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// return immediately as subclass has indicated that it hasn&#x27;t completed</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.sessionStrategy.onAuthentication(authenticationResult, request, response);</span><br><span class="line">        <span class="comment">// Authentication success</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.continueChainBeforeSuccessfulAuthentication) &#123;</span><br><span class="line">            chain.doFilter(request, response);</span><br><span class="line">        &#125;</span><br><span class="line">        successfulAuthentication(request, response, chain, authenticationResult);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (InternalAuthenticationServiceException failed) &#123;</span><br><span class="line">        <span class="keyword">this</span>.logger.error(<span class="string">&quot;An internal error occurred while trying to authenticate the user.&quot;</span>, failed);</span><br><span class="line">        unsuccessfulAuthentication(request, response, failed);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (AuthenticationException ex) &#123;</span><br><span class="line">        <span class="comment">// Authentication failed</span></span><br><span class="line">        unsuccessfulAuthentication(request, response, ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>子类<code>UsernamePasswordAuthenticationFilter</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Authentication <span class="title">attemptAuthentication</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">    <span class="comment">//请求是否只能是post</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.postOnly &amp;&amp; !request.getMethod().equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> AuthenticationServiceException(<span class="string">&quot;Authentication method not supported: &quot;</span> + request.getMethod());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理用户名密码，生成UsernamePasswordAuthenticationToken对象</span></span><br><span class="line">    String username = obtainUsername(request);</span><br><span class="line">    username = (username != <span class="keyword">null</span>) ? username : <span class="string">&quot;&quot;</span>;</span><br><span class="line">    username = username.trim();</span><br><span class="line">    String password = obtainPassword(request);</span><br><span class="line">    password = (password != <span class="keyword">null</span>) ? password : <span class="string">&quot;&quot;</span>;</span><br><span class="line">    UsernamePasswordAuthenticationToken authRequest = <span class="keyword">new</span> UsernamePasswordAuthenticationToken(username, password);</span><br><span class="line">    <span class="comment">// Allow subclasses to set the &quot;details&quot; property</span></span><br><span class="line">    setDetails(request, authRequest);</span><br><span class="line">    <span class="comment">//getAuthenticationManager这里就是获取认证管理器对象，找到它的子类去进行认证，这里有多个认证管理类，可以进行自定义</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getAuthenticationManager().authenticate(authRequest);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//一个UsernamePasswordAuthenticationToken对象中包含以下内容，（待补充）</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Object principal;<span class="comment">//封装了用户名称</span></span><br><span class="line"><span class="keyword">private</span> Object credentials;<span class="comment">//封装用户密码</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Collection&lt;GrantedAuthority&gt; authorities;</span><br><span class="line"><span class="keyword">private</span> Object details;<span class="comment">//用户详细信息</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> authenticated = <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>以下内容待补充</strong></p>
+<h4 id="FilterSecurityInterceptor"><a href="#FilterSecurityInterceptor" class="headerlink" title="FilterSecurityInterceptor"></a>FilterSecurityInterceptor</h4><p>这是授权管理器的入口</p>
+<h4 id="ExceptionTranslationFilter"><a href="#ExceptionTranslationFilter" class="headerlink" title="ExceptionTranslationFilter"></a>ExceptionTranslationFilter</h4><p>处理 AccessDeniedException 和 AuthenticationException 异常</p>
+<h4 id="SecurityContextPersistenceFilter"><a href="#SecurityContextPersistenceFilter" class="headerlink" title="SecurityContextPersistenceFilter"></a>SecurityContextPersistenceFilter</h4><p>在每次请求处理之前将该请求相关的安全上下文信息加载到 SecurityContextHolder 中，然后在该次请求处理完成之后，将 SecurityContextHolder 中关于这次请求的信息存储到一个“仓储”中，然后将 SecurityContextHolder 中的信息清除，例如在Session中维护一个用户的安全信息就是这个过滤器处理的</p>
+<h4 id="扩展点"><a href="#扩展点" class="headerlink" title="扩展点"></a>扩展点</h4><p>参考：<a href="https://blog.csdn.net/u012702547/article/details/89629415">(28条消息) Spring Security 工作原理概览_江南一点雨的专栏-CSDN博客</a></p>
+<ol>
+<li>鉴权失败处理器</li>
+<li>验证器</li>
+<li>登录成功处理器</li>
+<li>投票器</li>
+<li>自定义token处理过滤器</li>
+<li>登出成功处理器</li>
+<li>登录失败处理器</li>
+<li>自定义 UsernamePasswordAuthenticationFilter</li>
+</ol>
+]]></content>
+      <categories>
+        <category>SpringSecurity</category>
       </categories>
       <tags>
         <tag>Spring</tag>
@@ -248,59 +303,24 @@
       </tags>
   </entry>
   <entry>
-    <title>SpringSecurity认证和授权流程</title>
-    <url>/SpringSecurity%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B-b6e570de3c6b/</url>
-    <content><![CDATA[<p>通过这篇文章先大致了解整个认证和授权流程，以及后续可扩展的功能点</p>
+    <title>linux命令记录</title>
+    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
+    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
 <span id="more"></span>
 
-<blockquote>
-<p>参考：<a href="https://blog.csdn.net/u012702547/article/details/89629415">(28条消息) Spring Security 工作原理概览_江南一点雨的专栏-CSDN博客</a></p>
-</blockquote>
-<p>先看下整个流程图，这个图是参考上面文章，结合我本身项目实践中用的扩展点，进行进一步解释</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211226133814.png" alt="springsecurity的认证和授权"></p>
-<p>**SpringSecurity的使用，主要包含认证和授权两方面功能，对应的有两个管理器：认证管理器（<code>AuthenticationManager</code> ）、授权管理器（<code>AccessDecisonManager</code> ），整个流程都围绕这两方面进行，中间穿插着其他一些附属功能，如处理跨站请求伪造、处理用户的登录登出等等。下面将介绍介绍几个比较重要的Filter以及官方支持的扩展点 **</p>
-<h4 id="CsrfFilter"><a href="#CsrfFilter" class="headerlink" title="CsrfFilter"></a>CsrfFilter</h4><p>利用token处理跨站请求伪造，分析一下代码逻辑，如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doFilterInternal</span><span class="params">(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    request.setAttribute(HttpServletResponse.class.getName(), response);</span><br><span class="line">    <span class="comment">//从request中获取CsrfToken</span></span><br><span class="line">    CsrfToken csrfToken = <span class="keyword">this</span>.tokenRepository.loadToken(request);</span><br><span class="line">    <span class="comment">//判断是否为null</span></span><br><span class="line">    <span class="keyword">boolean</span> missingToken = csrfToken == <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (missingToken) &#123;</span><br><span class="line">        <span class="comment">//如果为null，则生成一个新的token，并保存到tokenRepository，用于后续请求的验证</span></span><br><span class="line">        csrfToken = <span class="keyword">this</span>.tokenRepository.generateToken(request);</span><br><span class="line">        <span class="keyword">this</span>.tokenRepository.saveToken(csrfToken, request, response);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//将csrfToken放入到请求参数中</span></span><br><span class="line">    request.setAttribute(CsrfToken.class.getName(), csrfToken);</span><br><span class="line">    request.setAttribute(csrfToken.getParameterName(), csrfToken);</span><br><span class="line">    <span class="comment">//判断是否需要csrf验证，不需要则直接进入下一个filter</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.requireCsrfProtectionMatcher.matches(request)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.logger.isTraceEnabled()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.logger.trace(<span class="string">&quot;Did not protect against CSRF since request did not match &quot;</span> + <span class="keyword">this</span>.requireCsrfProtectionMatcher);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//需要验证，从请求头获取传入的actualToken</span></span><br><span class="line">        String actualToken = request.getHeader(csrfToken.getHeaderName());</span><br><span class="line">        <span class="keyword">if</span> (actualToken == <span class="keyword">null</span>) &#123;</span><br><span class="line">            actualToken = request.getParameter(csrfToken.getParameterName());</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//判断传入的token和服务器端存储的token是否一致，不一致则报错</span></span><br><span class="line">        <span class="keyword">if</span> (!csrfToken.getToken().equals(actualToken)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.logger.debug(LogMessage.of(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;Invalid CSRF token found for &quot;</span> + UrlUtils.buildFullRequestUrl(request);</span><br><span class="line">            &#125;));</span><br><span class="line">            AccessDeniedException exception = !missingToken ? <span class="keyword">new</span> InvalidCsrfTokenException(csrfToken, actualToken) : <span class="keyword">new</span> MissingCsrfTokenException(actualToken);</span><br><span class="line">            <span class="keyword">this</span>.accessDeniedHandler.handle(request, response, (AccessDeniedException)exception);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            filterChain.doFilter(request, response);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
+<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
 
-<p>待分析：</p>
-<ul>
-<li>tokenRepository有三个实现类</li>
-<li>如何判断是否需要验证csrf：requireCsrfProtectionMatcher</li>
-</ul>
-<h4 id="UsernamePasswordAuthenticationFilter"><a href="#UsernamePasswordAuthenticationFilter" class="headerlink" title="UsernamePasswordAuthenticationFilter"></a>UsernamePasswordAuthenticationFilter</h4><p>用于处理基于表单的登录请求，从表单中获取用户名和密码，也就是普通的登录页面，输入用户名密码进行登录。代码分析如下：</p>
-<ul>
-<li>继承父类<code>AbstractAuthenticationProcessingFilter</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(HttpServletRequest request, HttpServletResponse response, FilterChain chain)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    <span class="comment">//不需要认证，直接通过</span></span><br><span class="line">    <span class="keyword">if</span> (!requiresAuthentication(request, response)) &#123;</span><br><span class="line">        chain.doFilter(request, response);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//这里attemptAuthentication（尝试认证）是一个抽象方法，具体实现由子类实现，见下方</span></span><br><span class="line">        Authentication authenticationResult = attemptAuthentication(request, response);</span><br><span class="line">        <span class="keyword">if</span> (authenticationResult == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// return immediately as subclass has indicated that it hasn&#x27;t completed</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.sessionStrategy.onAuthentication(authenticationResult, request, response);</span><br><span class="line">        <span class="comment">// Authentication success</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.continueChainBeforeSuccessfulAuthentication) &#123;</span><br><span class="line">            chain.doFilter(request, response);</span><br><span class="line">        &#125;</span><br><span class="line">        successfulAuthentication(request, response, chain, authenticationResult);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (InternalAuthenticationServiceException failed) &#123;</span><br><span class="line">        <span class="keyword">this</span>.logger.error(<span class="string">&quot;An internal error occurred while trying to authenticate the user.&quot;</span>, failed);</span><br><span class="line">        unsuccessfulAuthentication(request, response, failed);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (AuthenticationException ex) &#123;</span><br><span class="line">        <span class="comment">// Authentication failed</span></span><br><span class="line">        unsuccessfulAuthentication(request, response, ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>子类<code>UsernamePasswordAuthenticationFilter</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Authentication <span class="title">attemptAuthentication</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">    <span class="comment">//请求是否只能是post</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.postOnly &amp;&amp; !request.getMethod().equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> AuthenticationServiceException(<span class="string">&quot;Authentication method not supported: &quot;</span> + request.getMethod());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理用户名密码，生成UsernamePasswordAuthenticationToken对象</span></span><br><span class="line">    String username = obtainUsername(request);</span><br><span class="line">    username = (username != <span class="keyword">null</span>) ? username : <span class="string">&quot;&quot;</span>;</span><br><span class="line">    username = username.trim();</span><br><span class="line">    String password = obtainPassword(request);</span><br><span class="line">    password = (password != <span class="keyword">null</span>) ? password : <span class="string">&quot;&quot;</span>;</span><br><span class="line">    UsernamePasswordAuthenticationToken authRequest = <span class="keyword">new</span> UsernamePasswordAuthenticationToken(username, password);</span><br><span class="line">    <span class="comment">// Allow subclasses to set the &quot;details&quot; property</span></span><br><span class="line">    setDetails(request, authRequest);</span><br><span class="line">    <span class="comment">//getAuthenticationManager这里就是获取认证管理器对象，找到它的子类去进行认证，这里有多个认证管理类，可以进行自定义</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getAuthenticationManager().authenticate(authRequest);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//一个UsernamePasswordAuthenticationToken对象中包含以下内容，（待补充）</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Object principal;<span class="comment">//封装了用户名称</span></span><br><span class="line"><span class="keyword">private</span> Object credentials;<span class="comment">//封装用户密码</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Collection&lt;GrantedAuthority&gt; authorities;</span><br><span class="line"><span class="keyword">private</span> Object details;<span class="comment">//用户详细信息</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> authenticated = <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p><strong>以下内容待补充</strong></p>
-<h4 id="FilterSecurityInterceptor"><a href="#FilterSecurityInterceptor" class="headerlink" title="FilterSecurityInterceptor"></a>FilterSecurityInterceptor</h4><p>这是授权管理器的入口</p>
-<h4 id="ExceptionTranslationFilter"><a href="#ExceptionTranslationFilter" class="headerlink" title="ExceptionTranslationFilter"></a>ExceptionTranslationFilter</h4><p>处理 AccessDeniedException 和 AuthenticationException 异常</p>
-<h4 id="SecurityContextPersistenceFilter"><a href="#SecurityContextPersistenceFilter" class="headerlink" title="SecurityContextPersistenceFilter"></a>SecurityContextPersistenceFilter</h4><p>在每次请求处理之前将该请求相关的安全上下文信息加载到 SecurityContextHolder 中，然后在该次请求处理完成之后，将 SecurityContextHolder 中关于这次请求的信息存储到一个“仓储”中，然后将 SecurityContextHolder 中的信息清除，例如在Session中维护一个用户的安全信息就是这个过滤器处理的</p>
-<h4 id="扩展点"><a href="#扩展点" class="headerlink" title="扩展点"></a>扩展点</h4><p>参考：<a href="https://blog.csdn.net/u012702547/article/details/89629415">(28条消息) Spring Security 工作原理概览_江南一点雨的专栏-CSDN博客</a></p>
-<ol>
-<li>鉴权失败处理器</li>
-<li>验证器</li>
-<li>登录成功处理器</li>
-<li>投票器</li>
-<li>自定义token处理过滤器</li>
-<li>登出成功处理器</li>
-<li>登录失败处理器</li>
-<li>自定义 UsernamePasswordAuthenticationFilter</li>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
+</li>
+<li><p>安装vim命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
 </ol>
 ]]></content>
       <categories>
-        <category>SpringSecurity</category>
+        <category>linux</category>
       </categories>
-      <tags>
-        <tag>Spring</tag>
-      </tags>
   </entry>
   <entry>
     <title>hexo发布博客常用命令</title>
@@ -340,26 +360,6 @@
       <tags>
         <tag>工具</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>linux命令记录</title>
-    <url>/linux%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95-a0217e7140cd/</url>
-    <content><![CDATA[<p>日常使用过程中的linux命令记录</p>
-<span id="more"></span>
-
-<h4 id="安装linux命令的步骤"><a href="#安装linux命令的步骤" class="headerlink" title="安装linux命令的步骤"></a>安装linux命令的步骤</h4><ol>
-<li><p>当发现某个命令不存在之后，先判断这个命令是谁提供的，如：vim</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum provides vim</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20211215215619.png"></p>
-</li>
-<li><p>安装vim命令</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yum -y install vim</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
   </entry>
   <entry>
     <title>java动态代理</title>
@@ -481,24 +481,6 @@
       </tags>
   </entry>
   <entry>
-    <title> springboot读取配置文件</title>
-    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
-    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
-<span id="more"></span>
-
-<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
-  </entry>
-  <entry>
     <title>typora上传图片</title>
     <url>/typora%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E4%BD%BF%E7%94%A8Gitee%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A-d53dceeff0ca/</url>
     <content><![CDATA[<p>typora上传图片，使用Gitee作为图床</p>
@@ -521,6 +503,24 @@
       </tags>
   </entry>
   <entry>
+    <title> springboot读取配置文件</title>
+    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
+    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
+<span id="more"></span>
+
+<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
     <title>可视化的监控 spring-boot 程序的运行状态</title>
     <url>/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E7%9B%91%E6%8E%A7-spring-boot-%E7%A8%8B%E5%BA%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81-196b11fae5fc/</url>
     <content><![CDATA[<p>spring-boot 集成 spring-boot-admin 来可视化的监控 spring-boot 程序的运行状态，可以与 actuator 互相搭配使用</p>
@@ -528,25 +528,6 @@
       <categories>
         <category>SpringBoot</category>
       </categories>
-  </entry>
-  <entry>
-    <title>测试文件加密</title>
-    <url>/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，这个密码看着不太对，请再试试。" data-whm="抱歉，这个文章不能被纠正，不过您还是能看看解密后的内容。">
-  <script id="hbeData" type="hbeData" data-hmacdigest="eb8a803bb67cb2a094eb9ad7f8de51f644d4db944b9b7ec8a152727f6fd3c0fb">4f9d6c703ece105168ceb7dec42064620bb84448cee931f825eaa3c5ae7c8bbf6f482576ebd08f86f86b45723917cd1f48b5056848233e462ade634c2fae0cc16e6cffcdb36ec69d6b347c06d0a03a5972711b1b815b20e52bb9b4eacce07fae</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好，这里需要密码。</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>life</tag>
-      </tags>
   </entry>
   <entry>
     <title>监控 spring-boot 的启动和运行状态</title>
@@ -626,6 +607,25 @@
       </categories>
       <tags>
         <tag>反射</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>测试文件加密</title>
+    <url>/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86-e7824db4f1ae/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉，这个密码看着不太对，请再试试。" data-whm="抱歉，这个文章不能被纠正，不过您还是能看看解密后的内容。">
+  <script id="hbeData" type="hbeData" data-hmacdigest="eb8a803bb67cb2a094eb9ad7f8de51f644d4db944b9b7ec8a152727f6fd3c0fb">4f9d6c703ece105168ceb7dec42064620bb84448cee931f825eaa3c5ae7c8bbf6f482576ebd08f86f86b45723917cd1f48b5056848233e462ade634c2fae0cc16e6cffcdb36ec69d6b347c06d0a03a5972711b1b815b20e52bb9b4eacce07fae</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">您好，这里需要密码。</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <tags>
+        <tag>life</tag>
       </tags>
   </entry>
 </search>
