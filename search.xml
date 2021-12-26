@@ -102,7 +102,9 @@
     <title>SpringBoot核心功能-web开发</title>
     <url>/SpringBoot%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-web%E5%BC%80%E5%8F%91-d6abb6d12fa4/</url>
     <content><![CDATA[<hr>
-<p>今天整理一下SpringBoot的web开发，按照课程学习有10个部分，今天整理一下简单功能分析、请求参数处理</p>
+<p>今天整理一下SpringBoot的web开发，简单功能分析、请求参数处理</p>
+<span id="more"></span>
+
 <h3 id="简单功能分析"><a href="#简单功能分析" class="headerlink" title="简单功能分析"></a>简单功能分析</h3><h4 id="静态资源访问"><a href="#静态资源访问" class="headerlink" title="静态资源访问"></a>静态资源访问</h4><h4 id="静态资源目录"><a href="#静态资源目录" class="headerlink" title="静态资源目录"></a>静态资源目录</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.resourceProperties.isAddMappings()) &#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;Default resource handling disabled&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Duration cachePeriod = <span class="keyword">this</span>.resourceProperties.getCache().getPeriod();</span><br><span class="line">        CacheControl cacheControl = <span class="keyword">this</span>.resourceProperties.getCache().getCachecontrol().toHttpCacheControl();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(<span class="string">&quot;/webjars/**&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;/webjars/**&quot;</span>&#125;).addResourceLocations(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;classpath:/META-INF/resources/webjars/&quot;</span>&#125;).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl).setUseLastModified(<span class="keyword">this</span>.resourceProperties.getCache().isUseLastModified()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String staticPathPattern = <span class="keyword">this</span>.mvcProperties.getStaticPathPattern();</span><br><span class="line">        <span class="keyword">if</span> (!registry.hasMappingForPattern(staticPathPattern)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.customizeResourceHandlerRegistration(registry.addResourceHandler(</span><br><span class="line">                <span class="keyword">new</span> String[]&#123;staticPathPattern&#125;)                                    .addResourceLocations(WebMvcAutoConfiguration.getResourceLocations(<span class="keyword">this</span>.resourceProperties.getStaticLocations())).setCachePeriod(<span class="keyword">this</span>.getSeconds(cachePeriod)).setCacheControl(cacheControl).setUseLastModified(<span class="keyword">this</span>.resourceProperties.getCache().isUseLastModified()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>只要静态资源放在类路径下：/static、/public、/resources、/META-INF/resources，就可以这样访问：当前项目根目录/+静态资源名</p>
@@ -130,6 +132,12 @@
 </li>
 </ul>
 ]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
   </entry>
   <entry>
     <title>SpringMVC流程源码分析</title>
