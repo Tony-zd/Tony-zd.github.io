@@ -31,7 +31,10 @@
   <entry>
     <title>Redis主从复制</title>
     <url>/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-9771e7ae2a6e/</url>
-    <content><![CDATA[<h3 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h3><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master/leader)，后者称为从节点(slave/follower)；数据的复制是单向的，只能由主节点到从节点。 Master以写为主，Slave 以读为主。默认情况下每一个redis服务器都是主节点，并且每一个主节点可以有多个从节点或者没有从节点，每一个从节点只能有一个主节点。</p>
+    <content><![CDATA[<p>通过这篇文章整理一下redis主从复制、主从数据一致性、数据同步原理、哨兵模式等相关知识点</p>
+<span id="more"></span>
+
+<h3 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h3><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master/leader)，后者称为从节点(slave/follower)；数据的复制是单向的，只能由主节点到从节点。 Master以写为主，Slave 以读为主。默认情况下每一个redis服务器都是主节点，并且每一个主节点可以有多个从节点或者没有从节点，每一个从节点只能有一个主节点。</p>
 <h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ol>
 <li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
 <li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务 的冗余。</li>
