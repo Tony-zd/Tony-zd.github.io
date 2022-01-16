@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hashmap源码分析</title>
+    <url>/Hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-7ab6c0ae5920/</url>
+    <content><![CDATA[<p>最近简单读了一下hashmap的源码</p>
+<span id="more"></span>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;<span class="comment">//可序列化</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16，默认大小16,2的幂次方</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;<span class="comment">// 最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;<span class="comment">//加载因子，16*0.75=12，达到12时进行扩容</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;<span class="comment">//转成红黑树临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;<span class="comment">//转成链表临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;<span class="comment">//数组长度临界点、</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;<span class="comment">//node数组</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="基础节点结构"><a href="#基础节点结构" class="headerlink" title="基础节点结构"></a>基础节点结构</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;<span class="comment">//key的hash值</span></span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//初始容量小于0，则报错</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal initial capacity: &quot;</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="comment">//初始容量大于1&lt;&lt;30,则容量为1&lt;&lt;30；这里注意看下扩容时的代码，看下最大值是什么</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="comment">//加载因子校验</span></span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="tableSizeFor方法"><a href="#tableSizeFor方法" class="headerlink" title="tableSizeFor方法"></a>tableSizeFor方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//找到大于或等于 cap 的最小2的幂</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="putVar方法"><a href="#putVar方法" class="headerlink" title="putVar方法"></a>putVar方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注意括号中进行了大量的赋值操作</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="params"><span class="function">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个空的node数组，节点p，两个变量</span></span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">//进行赋值操作，n为数组长度，数组是null或者长度为0，则进行初始化</span></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="comment">//hashmap的hash算法，初始化节点给p，然后将key、value放进去</span></span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//这里的e就是要put的节点</span></span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="comment">//如果key值相同，并且hashcode相同，直接将p赋值给e</span></span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="comment">//如果p是一个二叉树，将值放入</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//当前桶是一个链表，循环链表</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="comment">//找到最后都没有找到，则将新值放入链表尾部</span></span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果找到了，则break跳出循环，后面更新value就可以</span></span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;<span class="comment">//修改p的指针，p指向p的next</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新值，并返回旧值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="comment">//判断大小有没有超过阈值，超过了需要扩容</span></span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    <span class="comment">//这个方法在LinkedHashMap中重写了，保证顺序</span></span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">p = tab[i = (n - <span class="number">1</span>) &amp; hash</span><br><span class="line">e = p.next</span><br><span class="line">p = e</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>集合</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis主从复制</title>
+    <url>/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-9771e7ae2a6e/</url>
+    <content><![CDATA[<h3 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h3><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master/leader)，后者称为从节点(slave/follower)；数据的复制是单向的，只能由主节点到从节点。 Master以写为主，Slave 以读为主。默认情况下每一个redis服务器都是主节点，并且每一个主节点可以有多个从节点或者没有从节点，每一个从节点只能有一个主节点。</p>
+<h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ol>
+<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务 的冗余。</li>
+<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务 （即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>高可用（集群）基石：除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复 制是Redis高可用的基础。</li>
+</ol>
+<h3 id="项目应用"><a href="#项目应用" class="headerlink" title="项目应用"></a>项目应用</h3><p>一般来说公司的redis不能只部署一台服务器，容易发生单点故障，接受所有请求负载（读多写少），压力较大。而且redis服务器的内存有限，一般最大为20G，所以单台机器肯定不够。通常公司中会以一主两从、读写分离的方式部署redis服务器。</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183358.png" alt="image-20220116183346039"></p>
+<h3 id="详细配置步骤"><a href="#详细配置步骤" class="headerlink" title="详细配置步骤"></a>详细配置步骤</h3><ol>
+<li>先连一个redis客户端，看下服务器的信息</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">connected_slaves:<span class="number">0</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:74e8c8e47c171b686c177193ac386e3b84371d2b</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">0</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">0</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">0</span></span><br><span class="line">repl_backlog_histlen:<span class="number">0</span></span><br><span class="line">可以看到如果不配置主从的话，默认情况下，每一台都是主节点，没有从节点</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>配置三台redis服务器</li>
+</ol>
+<p>修改配置文件中的端口、pid名称、log文件名称、dump.rdb文件名称</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@ecs-94482 bin]# ps -ef|grep redis</span><br><span class="line">root     21717     1  0 15:02 ?        00:00:00 redis-server *:6379</span><br><span class="line">root     21796     1  0 15:12 ?        00:00:00 redis-server *:6380</span><br><span class="line">root     21802     1  0 15:12 ?        00:00:00 redis-server *:6381</span><br><span class="line">root     21811 21506  0 15:13 pts/1    00:00:00 grep --color=auto redis</span><br></pre></td></tr></table></figure>
+
+<p>因为每一台默认都是主节点，所以主节点不用配置，我们选用默认端口作为主节点，下面来配置从节点</p>
+<p><strong>注意</strong>：配置从节点的命令为：（旧）slaveof ip port或者（新）replicaof ip port</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- slave1配置</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6381</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:slave</span><br><span class="line">master_host:<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">master_port:<span class="number">6379</span></span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:<span class="number">3</span></span><br><span class="line">master_sync_in_progress:<span class="number">0</span></span><br><span class="line">slave_read_repl_offset:<span class="number">196</span></span><br><span class="line">slave_repl_offset:<span class="number">196</span></span><br><span class="line">slave_priority:<span class="number">100</span></span><br><span class="line">slave_read_only:<span class="number">1</span></span><br><span class="line">replica_announced:<span class="number">1</span></span><br><span class="line">connected_slaves:<span class="number">0</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:5213e4f83b1b0f0d5e904b0436995e6a509aad08</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">196</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">1</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">183</span></span><br><span class="line">repl_backlog_histlen:<span class="number">14</span></span><br><span class="line">- slave2配置</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:slave</span><br><span class="line">master_host:<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">master_port:<span class="number">6379</span></span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:<span class="number">4</span></span><br><span class="line">master_sync_in_progress:<span class="number">0</span></span><br><span class="line">slave_read_repl_offset:<span class="number">112</span></span><br><span class="line">slave_repl_offset:<span class="number">112</span></span><br><span class="line">slave_priority:<span class="number">100</span></span><br><span class="line">slave_read_only:<span class="number">1</span></span><br><span class="line">replica_announced:<span class="number">1</span></span><br><span class="line">connected_slaves:<span class="number">0</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:5213e4f83b1b0f0d5e904b0436995e6a509aad08</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">112</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">1</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">1</span></span><br><span class="line">repl_backlog_histlen:<span class="number">112</span></span><br><span class="line">- 主节点信息</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">connected_slaves:<span class="number">2</span></span><br><span class="line">slave0:ip=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>,port=<span class="number">6380</span>,state=online,offset=<span class="number">196</span>,lag=<span class="number">0</span></span><br><span class="line">slave1:ip=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>,port=<span class="number">6381</span>,state=online,offset=<span class="number">196</span>,lag=<span class="number">1</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:5213e4f83b1b0f0d5e904b0436995e6a509aad08</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">196</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">1</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">1</span></span><br><span class="line">repl_backlog_histlen:<span class="number">196</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：</p>
+<ul>
+<li><p>上面的配置都是在命令行配置，服务器重启或者停止则失效</p>
+</li>
+<li><p>从节点信息中<code>master_link_status:up</code>为up时表示工作正常</p>
+</li>
+<li><p>如果主节点配置了密码，在从节点需要配置参数<code>masterauth</code>，主节点的密码</p>
+</li>
+</ul>
+<ol start="3">
+<li>测试</li>
+</ol>
+<p>主节点修改值：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; get name</span><br><span class="line"><span class="string">&quot;sunt&quot;</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; set name suntong</span><br><span class="line">OK</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; get name</span><br><span class="line"><span class="string">&quot;suntong&quot;</span></span><br><span class="line">从节点查看值</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; get name</span><br><span class="line"><span class="string">&quot;suntong&quot;</span></span><br><span class="line">从节点只能查看值，不能修改值</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; get name</span><br><span class="line"><span class="string">&quot;suntong&quot;</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; <span class="function">set name <span class="title">sunt</span></span></span><br><span class="line"><span class="function"><span class="params">(error)</span> READONLY You can&#x27;t write against a read only replica.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="主从数据一致性"><a href="#主从数据一致性" class="headerlink" title="主从数据一致性"></a>主从数据一致性</h3><p>引用文章：<a href="https://juejin.cn/post/7051129092908777503">redis核心篇(三)-高可用架构(一)之主从与哨兵 - 掘金 (juejin.cn)</a></p>
+<p>如何保证主从节点数据一致，数据一致需要从主节点将数据同步到从节点，这个同步有几种方式：强一致性（同步）、弱一致性（异步）、最终一致性（消息队列）</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183853.png" alt="image-20220116183847828"></p>
+<ul>
+<li>强一致性：主从同步使用同步方式，保证数据一致性，但是没有高性能，即有高可靠，无高性能</li>
+<li>弱一致性：主从同步使用异步方式，保证redis的高性能，但是可能会丢失数据，即有高性能，无高可靠</li>
+<li>最终一致性：在主节点和从节点之间使用缓存区，消息队列，在高性能和高可靠之间折中，强调高一致性</li>
+</ul>
+<h3 id="主从同步原理"><a href="#主从同步原理" class="headerlink" title="主从同步原理"></a>主从同步原理</h3><p>同步不仅仅是数据的同步，在数据同步的过程中，主节点继续产生的命令也需要同步，这就是命令同步。</p>
+<p>主从复制分为</p>
+<ul>
+<li>数据同步<ul>
+<li>首次连接到主节点，全量复制</li>
+<li>断开重连，增量复制</li>
+</ul>
+</li>
+<li>命令同步</li>
+</ul>
+<h4 id="全量复制（sync）"><a href="#全量复制（sync）" class="headerlink" title="全量复制（sync）"></a>全量复制（sync）</h4><p>在2.8版本之前只有全量复制</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183928.png" alt="image-20220116183924110"></p>
+<ol>
+<li>主从节点第一次连接时，从节点向主节点发送同步数据指令：psync ? -1，？号代表主服务器的id，-1代表偏移量，由于是第一次连接，这些信息还不知道，所以就用问号和-1代替。</li>
+<li>主节点收到指令之后，返回信息给从节点：FULLRESYNC runID offset，告诉从节点主节点的id和偏移量，从节点保存信息。</li>
+<li>主节点向从节点发送RDB文件，从节点加载RDB文件(第一次连接，从库收到RDB文件之后会清空数据库，再执行RDB文件)</li>
+<li>主节点发送缓存区新写入的命令到从节点，从节点执行命令</li>
+</ol>
+<p><strong>这里的第四步就是命令复制，为什么需要这一步，因为主节点在生成RDB文件时是fork一个子线程去执行的，主节点没有阻塞，继续执行命令，这些命令也需要进行同步</strong></p>
+<h4 id="断开重连（psync）"><a href="#断开重连（psync）" class="headerlink" title="断开重连（psync）"></a>断开重连（psync）</h4><p>这是2.8版本之后新增的方式，通过偏移量进行增量复制，看下下面这幅图</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183959.png" alt="image-20220116183954525"></p>
+<p>在发生网络异常之后，主节点执行了一部分命令，但是从节点没有，这时候就需要psync</p>
+<ul>
+<li>需要整理一下psync的流程</li>
+</ul>
+<h4 id="级联操作"><a href="#级联操作" class="headerlink" title="级联操作"></a>级联操作</h4><p>主从复制，一个主节点可以有多个从节点，在进行复制时，需要给多个从节点进行复制，不管是全量复制还是增量复制，主节点fork子线程产生RDB文件时会有阻塞，给从节点传输RDB文件时会占用带宽，这个时候主从复制可以改成主从从模式，对从节点建立从节点，减轻主节点的压力，这叫做级联操作。</p>
+<h3 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h3><p>主从架构在可以用于读写分离，减轻单机压力，但是这样的高性能并不可靠，不能高可用，当主节点挂了之后，写能力就没有了，因此需要一种方式在主节点挂了之后，有其他的主节点替代，这就是哨兵。哨兵是 Redis 的一种运行模式，它专注于对 Redis 实例的运行状态进行监控，并能够在主节点发生故障时通过一系列的机制实现选主及主从切换，实现故障转移，确保整个 Redis 系统的可用性；</p>
+<p>待整理……</p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+  </entry>
+  <entry>
     <title>HashMap原理</title>
     <url>/HashMap%E5%8E%9F%E7%90%86-01cf3a29ddde/</url>
     <content><![CDATA[<p>哈哈</p>
@@ -63,34 +174,6 @@
 <li>链表</li>
 </ul>
 <h3 id=""><a href="#" class="headerlink" title=""></a></h3>]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>集合</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hashmap源码分析</title>
-    <url>/Hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-7ab6c0ae5920/</url>
-    <content><![CDATA[<p>最近简单读了一下hashmap的源码</p>
-<span id="more"></span>
-
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362498820763181265L</span>;<span class="comment">//可序列化</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16，默认大小16,2的幂次方</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;<span class="comment">// 最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;<span class="comment">//加载因子，16*0.75=12，达到12时进行扩容</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;<span class="comment">//转成红黑树临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNTREEIFY_THRESHOLD = <span class="number">6</span>;<span class="comment">//转成链表临界点</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_TREEIFY_CAPACITY = <span class="number">64</span>;<span class="comment">//数组长度临界点、</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;<span class="comment">//node数组</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="基础节点结构"><a href="#基础节点结构" class="headerlink" title="基础节点结构"></a>基础节点结构</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;<span class="comment">//key的hash值</span></span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//初始容量小于0，则报错</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal initial capacity: &quot;</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="comment">//初始容量大于1&lt;&lt;30,则容量为1&lt;&lt;30；这里注意看下扩容时的代码，看下最大值是什么</span></span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="comment">//加载因子校验</span></span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal load factor: &quot;</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="tableSizeFor方法"><a href="#tableSizeFor方法" class="headerlink" title="tableSizeFor方法"></a>tableSizeFor方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//找到大于或等于 cap 的最小2的幂</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="putVar方法"><a href="#putVar方法" class="headerlink" title="putVar方法"></a>putVar方法</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//注意括号中进行了大量的赋值操作</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="params"><span class="function">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//定义一个空的node数组，节点p，两个变量</span></span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">//进行赋值操作，n为数组长度，数组是null或者长度为0，则进行初始化</span></span><br><span class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">        n = (tab = resize()).length;</span><br><span class="line">    <span class="comment">//hashmap的hash算法，初始化节点给p，然后将key、value放进去</span></span><br><span class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//这里的e就是要put的节点</span></span><br><span class="line">        Node&lt;K,V&gt; e; K k;</span><br><span class="line">        <span class="comment">//如果key值相同，并且hashcode相同，直接将p赋值给e</span></span><br><span class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            e = p;</span><br><span class="line">        <span class="comment">//如果p是一个二叉树，将值放入</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//当前桶是一个链表，循环链表</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                <span class="comment">//找到最后都没有找到，则将新值放入链表尾部</span></span><br><span class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                        treeifyBin(tab, hash);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//如果找到了，则break跳出循环，后面更新value就可以</span></span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                p = e;<span class="comment">//修改p的指针，p指向p的next</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//更新值，并返回旧值</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">            V oldValue = e.value;</span><br><span class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                e.value = value;</span><br><span class="line">            afterNodeAccess(e);</span><br><span class="line">            <span class="keyword">return</span> oldValue;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++modCount;</span><br><span class="line">    <span class="comment">//判断大小有没有超过阈值，超过了需要扩容</span></span><br><span class="line">    <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">        resize();</span><br><span class="line">    <span class="comment">//这个方法在LinkedHashMap中重写了，保证顺序</span></span><br><span class="line">    afterNodeInsertion(evict);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">p = tab[i = (n - <span class="number">1</span>) &amp; hash</span><br><span class="line">e = p.next</span><br><span class="line">p = e</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -196,6 +279,45 @@
       </categories>
   </entry>
   <entry>
+    <title>hexo发布博客常用命令</title>
+    <url>/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE-e009715b4132/</url>
+    <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
+<span id="more"></span>
+
+<h4 id="1、创建，预览和发布"><a href="#1、创建，预览和发布" class="headerlink" title="1、创建，预览和发布"></a>1、创建，预览和发布</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">完成命令</span><br><span class="line">    hexo new &quot;postName&quot; #新建文章</span><br><span class="line">    hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">    hexo generate #生成静态页面至public目录</span><br><span class="line">    hexo server #开启预览访问端口（默认端口4000，&#x27;ctrl + c&#x27;关闭server）</span><br><span class="line">    hexo deploy #部署到GitHub</span><br><span class="line">    hexo help  # 查看帮助</span><br><span class="line">    hexo version  #查看Hexo的版本</span><br><span class="line">缩写：</span><br><span class="line">    hexo n == hexo new</span><br><span class="line">    hexo g == hexo generate</span><br><span class="line">    hexo s == hexo server</span><br><span class="line">    hexo d == hexo deploy</span><br><span class="line">组合：</span><br><span class="line">	hexo s -g #生成并本地预览</span><br><span class="line">	hexo d -g #生成并上传</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、字体修改"><a href="#2、字体修改" class="headerlink" title="2、字体修改"></a>2、字体修改</h4><ul>
+<li><p>找到主题的配置文件：D:\GitLocalLibrary\hexo\themes\hexo-theme-next\<strong>_config.yml</strong> </p>
+</li>
+<li><p>找到font配置项，如下图：</p>
+<img src="hexo常用命令及配置/字体.PNG" style="zoom:50%;" />
+
+<p>global为全局配置项，family设置字体（Noto Serif SC），size设置大小（默认是1，就是16px），我用的是0.8</p>
+</li>
+</ul>
+<h4 id="3、使用Typora写博客，上传图片问题"><a href="#3、使用Typora写博客，上传图片问题" class="headerlink" title="3、使用Typora写博客，上传图片问题"></a>3、使用Typora写博客，上传图片问题</h4><p>参考文章：</p>
+<p><a href="http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/">http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/</a></p>
+<p>注意点：</p>
+<ul>
+<li><p>插件下载</p>
+</li>
+<li><p>图片路径修改</p>
+</li>
+<li><p>存放图片的文件夹</p>
+</li>
+<li><p>在Typora上有配置项，可以在复制的时候将图片同步复制到对应目录下面</p>
+<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/image-20210724101758547.png" alt="image-20210724101758547"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringSecurity认证和授权流程</title>
     <url>/SpringSecurity%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B-b6e570de3c6b/</url>
     <content><![CDATA[<p>通过这篇文章先大致了解整个认证和授权流程，以及后续可扩展的功能点</p>
@@ -251,23 +373,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Sublime配置java运行环境</title>
-    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
-    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
-<span id="more"></span>
-
-<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
-
-<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>工具</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>for循环常见用法</title>
     <url>/for%E5%BE%AA%E7%8E%AF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95-5ff8a43fd614/</url>
     <content><![CDATA[<blockquote>
@@ -302,40 +407,18 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo发布博客常用命令</title>
-    <url>/hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%8A%E9%85%8D%E7%BD%AE-e009715b4132/</url>
-    <content><![CDATA[<p>暂时写下创建博客到发布博客的命令，后续逐步补充其他命令及配置</p>
+    <title>Sublime配置java运行环境</title>
+    <url>/Sublime%E9%85%8D%E7%BD%AEjava%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-3346d21c2ef4/</url>
+    <content><![CDATA[<p>Sublime Text 3配置java运行环境，附上Sublime Text 3注册码</p>
 <span id="more"></span>
 
-<h4 id="1、创建，预览和发布"><a href="#1、创建，预览和发布" class="headerlink" title="1、创建，预览和发布"></a>1、创建，预览和发布</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">完成命令</span><br><span class="line">    hexo new &quot;postName&quot; #新建文章</span><br><span class="line">    hexo new page &quot;pageName&quot; #新建页面</span><br><span class="line">    hexo generate #生成静态页面至public目录</span><br><span class="line">    hexo server #开启预览访问端口（默认端口4000，&#x27;ctrl + c&#x27;关闭server）</span><br><span class="line">    hexo deploy #部署到GitHub</span><br><span class="line">    hexo help  # 查看帮助</span><br><span class="line">    hexo version  #查看Hexo的版本</span><br><span class="line">缩写：</span><br><span class="line">    hexo n == hexo new</span><br><span class="line">    hexo g == hexo generate</span><br><span class="line">    hexo s == hexo server</span><br><span class="line">    hexo d == hexo deploy</span><br><span class="line">组合：</span><br><span class="line">	hexo s -g #生成并本地预览</span><br><span class="line">	hexo d -g #生成并上传</span><br></pre></td></tr></table></figure>
+<h4 id="1、安装jdk，设置环境变量"><a href="#1、安装jdk，设置环境变量" class="headerlink" title="1、安装jdk，设置环境变量"></a>1、安装jdk，设置环境变量</h4><h4 id="2、修改D-Sublime-Text-3-Packages-Java-sublime-package"><a href="#2、修改D-Sublime-Text-3-Packages-Java-sublime-package" class="headerlink" title="2、修改D:\Sublime Text 3\Packages\Java.sublime-package"></a>2、修改D:\Sublime Text 3\Packages\Java.sublime-package</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">打开压缩包Java.sublime-package</span><br><span class="line">找到JavaC.sublime-build文件，并打开</span><br><span class="line">修改内容：</span><br><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;cmd&quot;</span>: [<span class="string">&quot;javac&quot;</span>,<span class="string">&quot;-encoding&quot;</span>,<span class="string">&quot;UTF-8&quot;</span>,<span class="string">&quot;-d&quot;</span>,<span class="string">&quot;.&quot;</span>,<span class="string">&quot;$file&quot;</span>, <span class="string">&quot;&amp;&amp;&quot;</span>, <span class="string">&quot;java&quot;</span>, <span class="string">&quot;$file_base_name&quot;</span>], </span><br><span class="line"><span class="attr">&quot;working_dir&quot;</span>: <span class="string">&quot;$file_path&quot;</span>, </span><br><span class="line"><span class="attr">&quot;file_regex&quot;</span>: <span class="string">&quot;^(...*?):([0-9]*):?([0-9]*)&quot;</span>,</span><br><span class="line"><span class="attr">&quot;selector&quot;</span>: <span class="string">&quot;source.java&quot;</span>, </span><br><span class="line"><span class="attr">&quot;shell&quot;</span>: <span class="literal">true</span>, </span><br><span class="line"><span class="attr">&quot;encoding&quot;</span>:<span class="string">&quot;cp936&quot;</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="2、字体修改"><a href="#2、字体修改" class="headerlink" title="2、字体修改"></a>2、字体修改</h4><ul>
-<li><p>找到主题的配置文件：D:\GitLocalLibrary\hexo\themes\hexo-theme-next\<strong>_config.yml</strong> </p>
-</li>
-<li><p>找到font配置项，如下图：</p>
-<img src="hexo常用命令及配置/字体.PNG" style="zoom:50%;" />
+<h4 id="3、注意点"><a href="#3、注意点" class="headerlink" title="3、注意点"></a>3、注意点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">编码最好统一成utf-8，项目编码、运行编码</span><br><span class="line">cp936为了保证在sublime控制台显示正常</span><br><span class="line">&quot;-d&quot;,&quot;.&quot; ：为了能够找到编译后的class文件</span><br><span class="line">working_dir：定位到执行Java的路径</span><br></pre></td></tr></table></figure>
 
-<p>global为全局配置项，family设置字体（Noto Serif SC），size设置大小（默认是1，就是16px），我用的是0.8</p>
-</li>
-</ul>
-<h4 id="3、使用Typora写博客，上传图片问题"><a href="#3、使用Typora写博客，上传图片问题" class="headerlink" title="3、使用Typora写博客，上传图片问题"></a>3、使用Typora写博客，上传图片问题</h4><p>参考文章：</p>
-<p><a href="http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/">http://etrd.org/2017/01/23/hexo%E4%B8%AD%E5%AE%8C%E7%BE%8E%E6%8F%92%E5%85%A5%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87/</a></p>
-<p>注意点：</p>
-<ul>
-<li><p>插件下载</p>
-</li>
-<li><p>图片路径修改</p>
-</li>
-<li><p>存放图片的文件夹</p>
-</li>
-<li><p>在Typora上有配置项，可以在复制的时候将图片同步复制到对应目录下面</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/image-20210724101758547.png" alt="image-20210724101758547"></p>
-</li>
-</ul>
+<h4 id="4、注册码"><a href="#4、注册码" class="headerlink" title="4、注册码"></a>4、注册码</h4><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">Member J2TeaM</span><br><span class="line">Single User License</span><br><span class="line">EA7E<span class="number">-1011316</span></span><br><span class="line">D7DA350E <span class="number">1</span>B8B0760 <span class="number">972</span>F8B60 F3E64036</span><br><span class="line">B9B4E234 F356F38F <span class="number">0</span>AD1E3B7 <span class="number">0E9</span>C5FAD</span><br><span class="line">FA0A2ABE <span class="number">25</span>F65BD8 D51458E5 <span class="number">3923</span>CE80</span><br><span class="line"><span class="number">87428428</span> <span class="number">79079</span>A01 AA69F319 A1AF29A4</span><br><span class="line">A684C2DC <span class="number">0</span>B1583D4 <span class="number">19</span>CBD290 <span class="number">217618</span>CD</span><br><span class="line"><span class="number">5653E0</span>A0 BACE3948 BB2EE45E <span class="number">422</span>D2C87</span><br><span class="line">DD9AF44B <span class="number">99</span>C49590 D2DBDEE1 <span class="number">75860</span>FD2</span><br><span class="line"><span class="number">8</span>C8BB2AD B2ECE5A4 EFC08AF2 <span class="number">25</span>A9B864</span><br></pre></td></tr></table></figure>
+
 ]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
       <tags>
         <tag>工具</tag>
       </tags>
@@ -437,6 +520,24 @@
       </categories>
   </entry>
   <entry>
+    <title> springboot读取配置文件</title>
+    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
+    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
+<span id="more"></span>
+
+<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+  </entry>
+  <entry>
     <title>list常见去重方式</title>
     <url>/list%E5%B8%B8%E8%A7%81%E5%8E%BB%E9%87%8D%E6%96%B9%E5%BC%8F-e0742aeeb8a3/</url>
     <content><![CDATA[<p>简单写一下常见的list去重方式，并理解实现原理</p>
@@ -478,24 +579,6 @@
       <tags>
         <tag>工具</tag>
       </tags>
-  </entry>
-  <entry>
-    <title> springboot读取配置文件</title>
-    <url>/springboot%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-c1091e75f856/</url>
-    <content><![CDATA[<p>本 demo 演示如何获取配置文件的自定义配置，以及如何多环境下的配置文件信息的获取</p>
-<span id="more"></span>
-
-<h3 id="通过配置文件赋值"><a href="#通过配置文件赋值" class="headerlink" title="通过配置文件赋值"></a>通过配置文件赋值</h3><h4 id="1、使用-Value注解和“-”"><a href="#1、使用-Value注解和“-”" class="headerlink" title="1、使用@Value注解和“$()”"></a>1、使用@Value注解和“$()”</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data//@Data注解是lombok插件提供，注解在类上, 为类提供读写属性, 此外还提供了 equals()、hashCode()、toString() 方法</span><br><span class="line">@Component</span><br><span class="line">public class ApplicationProperty &#123;</span><br><span class="line">    @Value(&quot;$&#123;application.name&#125;&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Value(&quot;$&#123;application.version&#125;&quot;)</span><br><span class="line">    private String version;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">application:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  version: 1.1.1</span><br></pre></td></tr></table></figure>
-
-<h4 id="2、使用ConfigurationProperties注解组合匹配"><a href="#2、使用ConfigurationProperties注解组合匹配" class="headerlink" title="2、使用ConfigurationProperties注解组合匹配"></a>2、使用ConfigurationProperties注解组合匹配</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Data</span><br><span class="line">@ConfigurationProperties(prefix = &quot;developer&quot;)</span><br><span class="line">@Component</span><br><span class="line">public class DeveloperProperty &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private String website;</span><br><span class="line">    private String qq;</span><br><span class="line">    private String phoneNumber;</span><br><span class="line">&#125;</span><br><span class="line">配置文件如下：</span><br><span class="line">developer:</span><br><span class="line">  name: 嘿嘿</span><br><span class="line">  website: http://baidu.com</span><br><span class="line">  qq: 123456</span><br><span class="line">  phone-number: 1273648</span><br><span class="line">查找方式：developer+属性名（属性名需要和配置文件一样）</span><br></pre></td></tr></table></figure>
-
-<h4 id="3、多个配置文件切换"><a href="#3、多个配置文件切换" class="headerlink" title="3、多个配置文件切换"></a>3、多个配置文件切换</h4><p>项目启动时，会先根据spring.profiles.active的配置加载对应的配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /demo</span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: prod（这是有效的配置文件）</span><br><span class="line">    </span><br><span class="line">两个配置文件：</span><br><span class="line">application-dev.xml</span><br><span class="line">application-prod.xml</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>SpringBoot</category>
-      </categories>
   </entry>
   <entry>
     <title>typora上传图片</title>
@@ -626,88 +709,5 @@
       <tags>
         <tag>反射</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Redis主从复制</title>
-    <url>/Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-9771e7ae2a6e/</url>
-    <content><![CDATA[<h3 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h3><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master/leader)，后者称为从节点(slave/follower)；数据的复制是单向的，只能由主节点到从节点。 Master以写为主，Slave 以读为主。默认情况下每一个redis服务器都是主节点，并且每一个主节点可以有多个从节点或者没有从节点，每一个从节点只能有一个主节点。</p>
-<h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ol>
-<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
-<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务 的冗余。</li>
-<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务 （即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
-<li>高可用（集群）基石：除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复 制是Redis高可用的基础。</li>
-</ol>
-<h3 id="项目应用"><a href="#项目应用" class="headerlink" title="项目应用"></a>项目应用</h3><p>一般来说公司的redis不能只部署一台服务器，容易发生单点故障，接受所有请求负载（读多写少），压力较大。而且redis服务器的内存有限，一般最大为20G，所以单台机器肯定不够。通常公司中会以一主两从、读写分离的方式部署redis服务器。</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183358.png" alt="image-20220116183346039"></p>
-<h3 id="详细配置步骤"><a href="#详细配置步骤" class="headerlink" title="详细配置步骤"></a>详细配置步骤</h3><ol>
-<li>先连一个redis客户端，看下服务器的信息</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">connected_slaves:<span class="number">0</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:74e8c8e47c171b686c177193ac386e3b84371d2b</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">0</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">0</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">0</span></span><br><span class="line">repl_backlog_histlen:<span class="number">0</span></span><br><span class="line">可以看到如果不配置主从的话，默认情况下，每一台都是主节点，没有从节点</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>配置三台redis服务器</li>
-</ol>
-<p>修改配置文件中的端口、pid名称、log文件名称、dump.rdb文件名称</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@ecs-94482 bin]# ps -ef|grep redis</span><br><span class="line">root     21717     1  0 15:02 ?        00:00:00 redis-server *:6379</span><br><span class="line">root     21796     1  0 15:12 ?        00:00:00 redis-server *:6380</span><br><span class="line">root     21802     1  0 15:12 ?        00:00:00 redis-server *:6381</span><br><span class="line">root     21811 21506  0 15:13 pts/1    00:00:00 grep --color=auto redis</span><br></pre></td></tr></table></figure>
-
-<p>因为每一台默认都是主节点，所以主节点不用配置，我们选用默认端口作为主节点，下面来配置从节点</p>
-<p><strong>注意</strong>：配置从节点的命令为：（旧）slaveof ip port或者（新）replicaof ip port</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- slave1配置</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6381</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:slave</span><br><span class="line">master_host:<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">master_port:<span class="number">6379</span></span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:<span class="number">3</span></span><br><span class="line">master_sync_in_progress:<span class="number">0</span></span><br><span class="line">slave_read_repl_offset:<span class="number">196</span></span><br><span class="line">slave_repl_offset:<span class="number">196</span></span><br><span class="line">slave_priority:<span class="number">100</span></span><br><span class="line">slave_read_only:<span class="number">1</span></span><br><span class="line">replica_announced:<span class="number">1</span></span><br><span class="line">connected_slaves:<span class="number">0</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:5213e4f83b1b0f0d5e904b0436995e6a509aad08</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">196</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">1</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">183</span></span><br><span class="line">repl_backlog_histlen:<span class="number">14</span></span><br><span class="line">- slave2配置</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:slave</span><br><span class="line">master_host:<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">master_port:<span class="number">6379</span></span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:<span class="number">4</span></span><br><span class="line">master_sync_in_progress:<span class="number">0</span></span><br><span class="line">slave_read_repl_offset:<span class="number">112</span></span><br><span class="line">slave_repl_offset:<span class="number">112</span></span><br><span class="line">slave_priority:<span class="number">100</span></span><br><span class="line">slave_read_only:<span class="number">1</span></span><br><span class="line">replica_announced:<span class="number">1</span></span><br><span class="line">connected_slaves:<span class="number">0</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:5213e4f83b1b0f0d5e904b0436995e6a509aad08</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">112</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">1</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">1</span></span><br><span class="line">repl_backlog_histlen:<span class="number">112</span></span><br><span class="line">- 主节点信息</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">connected_slaves:<span class="number">2</span></span><br><span class="line">slave0:ip=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>,port=<span class="number">6380</span>,state=online,offset=<span class="number">196</span>,lag=<span class="number">0</span></span><br><span class="line">slave1:ip=<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>,port=<span class="number">6381</span>,state=online,offset=<span class="number">196</span>,lag=<span class="number">1</span></span><br><span class="line">master_failover_state:no-failover</span><br><span class="line">master_replid:5213e4f83b1b0f0d5e904b0436995e6a509aad08</span><br><span class="line">master_replid2:<span class="number">0000000000000000000000000000000000000000</span></span><br><span class="line">master_repl_offset:<span class="number">196</span></span><br><span class="line">second_repl_offset:-<span class="number">1</span></span><br><span class="line">repl_backlog_active:<span class="number">1</span></span><br><span class="line">repl_backlog_size:<span class="number">1048576</span></span><br><span class="line">repl_backlog_first_byte_offset:<span class="number">1</span></span><br><span class="line">repl_backlog_histlen:<span class="number">196</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>注意</strong>：</p>
-<ul>
-<li><p>上面的配置都是在命令行配置，服务器重启或者停止则失效</p>
-</li>
-<li><p>从节点信息中<code>master_link_status:up</code>为up时表示工作正常</p>
-</li>
-<li><p>如果主节点配置了密码，在从节点需要配置参数<code>masterauth</code>，主节点的密码</p>
-</li>
-</ul>
-<ol start="3">
-<li>测试</li>
-</ol>
-<p>主节点修改值：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; get name</span><br><span class="line"><span class="string">&quot;sunt&quot;</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; set name suntong</span><br><span class="line">OK</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; get name</span><br><span class="line"><span class="string">&quot;suntong&quot;</span></span><br><span class="line">从节点查看值</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; get name</span><br><span class="line"><span class="string">&quot;suntong&quot;</span></span><br><span class="line">从节点只能查看值，不能修改值</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; get name</span><br><span class="line"><span class="string">&quot;suntong&quot;</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6380</span>&gt; <span class="function">set name <span class="title">sunt</span></span></span><br><span class="line"><span class="function"><span class="params">(error)</span> READONLY You can&#x27;t write against a read only replica.</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="主从数据一致性"><a href="#主从数据一致性" class="headerlink" title="主从数据一致性"></a>主从数据一致性</h3><p>引用文章：<a href="https://juejin.cn/post/7051129092908777503">redis核心篇(三)-高可用架构(一)之主从与哨兵 - 掘金 (juejin.cn)</a></p>
-<p>如何保证主从节点数据一致，数据一致需要从主节点将数据同步到从节点，这个同步有几种方式：强一致性（同步）、弱一致性（异步）、最终一致性（消息队列）</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183853.png" alt="image-20220116183847828"></p>
-<ul>
-<li>强一致性：主从同步使用同步方式，保证数据一致性，但是没有高性能，即有高可靠，无高性能</li>
-<li>弱一致性：主从同步使用异步方式，保证redis的高性能，但是可能会丢失数据，即有高性能，无高可靠</li>
-<li>最终一致性：在主节点和从节点之间使用缓存区，消息队列，在高性能和高可靠之间折中，强调高一致性</li>
-</ul>
-<h3 id="主从同步原理"><a href="#主从同步原理" class="headerlink" title="主从同步原理"></a>主从同步原理</h3><p>同步不仅仅是数据的同步，在数据同步的过程中，主节点继续产生的命令也需要同步，这就是命令同步。</p>
-<p>主从复制分为</p>
-<ul>
-<li>数据同步<ul>
-<li>首次连接到主节点，全量复制</li>
-<li>断开重连，增量复制</li>
-</ul>
-</li>
-<li>命令同步</li>
-</ul>
-<h4 id="全量复制（sync）"><a href="#全量复制（sync）" class="headerlink" title="全量复制（sync）"></a>全量复制（sync）</h4><p>在2.8版本之前只有全量复制</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183928.png" alt="image-20220116183924110"></p>
-<ol>
-<li>主从节点第一次连接时，从节点向主节点发送同步数据指令：psync ? -1，？号代表主服务器的id，-1代表偏移量，由于是第一次连接，这些信息还不知道，所以就用问号和-1代替。</li>
-<li>主节点收到指令之后，返回信息给从节点：FULLRESYNC runID offset，告诉从节点主节点的id和偏移量，从节点保存信息。</li>
-<li>主节点向从节点发送RDB文件，从节点加载RDB文件(第一次连接，从库收到RDB文件之后会清空数据库，再执行RDB文件)</li>
-<li>主节点发送缓存区新写入的命令到从节点，从节点执行命令</li>
-</ol>
-<p><strong>这里的第四步就是命令复制，为什么需要这一步，因为主节点在生成RDB文件时是fork一个子线程去执行的，主节点没有阻塞，继续执行命令，这些命令也需要进行同步</strong></p>
-<h4 id="断开重连（psync）"><a href="#断开重连（psync）" class="headerlink" title="断开重连（psync）"></a>断开重连（psync）</h4><p>这是2.8版本之后新增的方式，通过偏移量进行增量复制，看下下面这幅图</p>
-<p><img src="https://gitee.com/zhongda-st/images/raw/master/typora/20220116183959.png" alt="image-20220116183954525"></p>
-<p>在发生网络异常之后，主节点执行了一部分命令，但是从节点没有，这时候就需要psync</p>
-<ul>
-<li>需要整理一下psync的流程</li>
-</ul>
-<h4 id="级联操作"><a href="#级联操作" class="headerlink" title="级联操作"></a>级联操作</h4><p>主从复制，一个主节点可以有多个从节点，在进行复制时，需要给多个从节点进行复制，不管是全量复制还是增量复制，主节点fork子线程产生RDB文件时会有阻塞，给从节点传输RDB文件时会占用带宽，这个时候主从复制可以改成主从从模式，对从节点建立从节点，减轻主节点的压力，这叫做级联操作。</p>
-<h3 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h3><p>主从架构在可以用于读写分离，减轻单机压力，但是这样的高性能并不可靠，不能高可用，当主节点挂了之后，写能力就没有了，因此需要一种方式在主节点挂了之后，有其他的主节点替代，这就是哨兵。哨兵是 Redis 的一种运行模式，它专注于对 Redis 实例的运行状态进行监控，并能够在主节点发生故障时通过一系列的机制实现选主及主从切换，实现故障转移，确保整个 Redis 系统的可用性；</p>
-<p>待整理……</p>
-]]></content>
-      <categories>
-        <category>Redis</category>
-      </categories>
   </entry>
 </search>
